@@ -112,7 +112,9 @@ export class UI {
       earconsToggle: document.getElementById('earcons-toggle'),
       hapticToggle: document.getElementById('haptic-toggle'),
       readShortcutsBtn: document.getElementById('read-shortcuts-btn'),
-      tourBtn: document.getElementById('tour-btn')
+      tourBtn: document.getElementById('tour-btn'),
+      skipLink: document.getElementById('skip-link'),
+      srAnnouncer: document.getElementById('sr-announcer')
     };
 
     this.loaderVisible = true;
@@ -716,6 +718,14 @@ export class UI {
     });
   }
 
+  announceSR(text) {
+    if (!this.el.srAnnouncer || !text) return;
+    this.el.srAnnouncer.textContent = '';
+    window.setTimeout(() => {
+      if (this.el.srAnnouncer) this.el.srAnnouncer.textContent = text;
+    }, 50);
+  }
+
   cancelSpeech() {
     if (this.speech) this.speech.cancel();
     this.speechUtterance = null;
@@ -855,6 +865,7 @@ export class UI {
     } else {
       this.chooseRegion(nextRegion);
     }
+    this.announceSR(`Category ${categoryIndex}: ${targetCat}. Selected ${nextRegion.name}.`);
     if (this.speechEnabled) {
       this.speak(`Category ${categoryIndex}: ${targetCat}. Selected ${nextRegion.name}.`);
     }
@@ -969,6 +980,7 @@ export class UI {
     this.el.yearInput.value = String(value);
     this.el.yearLabel.textContent = String(value);
     this.renderSignals();
+    this.announceSR(`Year ${value}`);
     if (this.handlers.onYearChange) this.handlers.onYearChange(value);
     if (!fromCompare) this.scheduleSpeech();
   }
@@ -1125,6 +1137,15 @@ export class UI {
       });
     }
 
+    if (this.el.skipLink) {
+      this.el.skipLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (this.handlers.onToggleAudio) this.handlers.onToggleAudio();
+        this.announceSR('Audio Observatory active. Playing planetary sonification.');
+        this.el.audioToggle?.focus();
+      });
+    }
+
     if (this.el.exportWavBtn) {
       this.el.exportWavBtn.addEventListener('click', () => this.exportAudioWav());
     }
@@ -1224,6 +1245,7 @@ export class UI {
     if ((event.key === 'h' || event.key === 'H') && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault();
       this.toggleHighContrast();
+      this.announceSR(document.body.classList.contains('high-contrast') ? 'High contrast mode enabled' : 'High contrast mode disabled');
       return;
     }
 
@@ -1231,6 +1253,7 @@ export class UI {
     if ((event.key === 't' || event.key === 'T') && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault();
       if (this.handlers.onToggleTour) this.handlers.onToggleTour();
+      this.announceSR('Guided Audio Tour toggled');
       return;
     }
 
@@ -1245,6 +1268,7 @@ export class UI {
     if ((event.key === 'p' || event.key === 'P') && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault();
       if (this.handlers.onToggleAudio) this.handlers.onToggleAudio();
+      this.announceSR(this.audioState.status === 'running' ? 'Audio paused' : 'Audio playing');
       return;
     }
 
@@ -1252,6 +1276,7 @@ export class UI {
     if ((event.key === 'm' || event.key === 'M') && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault();
       if (this.handlers.onMuteChange) this.handlers.onMuteChange(!this.audioState.muted);
+      this.announceSR(this.audioState.muted ? 'Audio unmuted' : 'Audio muted');
       return;
     }
 
@@ -1259,6 +1284,7 @@ export class UI {
     if ((event.key === 'v' || event.key === 'V') && !event.ctrlKey && !event.metaKey && !event.altKey) {
       event.preventDefault();
       this.setSpeechEnabled(!this.speechEnabled);
+      this.announceSR(this.speechEnabled ? 'Voice guide enabled' : 'Voice guide disabled');
       return;
     }
 
@@ -1267,6 +1293,7 @@ export class UI {
       event.preventDefault();
       this.toggleCompare();
       if (this.handlers.onCompare) this.handlers.onCompare(this.compareTimer !== null);
+      this.announceSR(this.compareTimer !== null ? '40-year comparative auditioning active' : 'Comparative auditioning stopped');
       return;
     }
 
@@ -1418,6 +1445,7 @@ export class UI {
         this.loaderRegions.forEach((region) => { region.inert = false; });
         this.el.panel.inert = !this.panelVisible;
         this.syncBackbarAria();
+        this.announceSR('Planetary Observatory ready. Press P to start listening to the planet, T for the guided audio tour, numbers 1 through 7 to jump between biomes, or question mark for shortcuts.');
         onHidden?.();
       } })
       .fromTo(
@@ -1446,6 +1474,7 @@ export class UI {
     this.syncBackbarAria();
     gsap.set([this.el.masthead, this.el.readout], { opacity: 1 });
     if (!this.isMobileSheet()) gsap.set(this.el.panel, { opacity: 1, x: 0 });
+    this.announceSR('Planetary Observatory ready. Press P to start listening to the planet, T for the guided audio tour, numbers 1 through 7 to jump between biomes, or question mark for shortcuts.');
   }
 
   isSkipVisible() {

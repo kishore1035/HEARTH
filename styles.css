@@ -2196,3 +2196,44 @@ body.high-contrast .mast-lab-btn:hover {
   background: #ffee00 !important;
   color: #000000 !important;
 }
+
+/* Screen Reader Only Utility (WCAG 2.2 Compliant) */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip link for keyboard and screen reader users */
+.skip-link {
+  position: absolute;
+  top: -999px;
+  left: 16px;
+  z-index: 99999;
+  background: #000000;
+  color: #ffee00;
+  border: 2px solid #ffee00;
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 16px;
+  outline: 3px solid #ffee00;
+  outline-offset: 4px;
+}
+

@@ -27,6 +27,8 @@
 </script>
 </head>
 <body>
+<a href="#audio-controls" class="skip-link" id="skip-link">Skip to planetary audio controls &bull; Press P to play, 1–7 for biomes, ? for shortcuts</a>
+
 
 <div id="stage">
   <canvas id="scene"></canvas>
@@ -268,6 +270,8 @@
     <p class="loader-foot">Planetary Telemetry &amp; Multi-Voice Acoustic Synthesis</p>
   </div>
 </div>
+
+<div id="sr-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script type="module" src="./src/main.js"></script>
 </body>
