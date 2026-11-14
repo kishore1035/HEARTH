@@ -1034,9 +1034,6 @@ export class SignalAudio {
     thump.start(time);
     thump.stop(time + 0.42);
   }
-    thump.start(time);
-    thump.stop(time + 0.42);
-  }
 
   async close() {
     if (!this.ctx) return;
