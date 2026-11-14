@@ -2,6 +2,7 @@
 node_modules/
 *.log
 temp_audio_sources/
+music/*.wav
 
 
 
