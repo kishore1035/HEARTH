@@ -13,9 +13,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   banda_aceh: {
     file: 'banda-aceh-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Banda Aceh Tsunami Inundation Coast',
-    note: '2004 Indian Ocean mega-tsunami ground zero.',
-    credit: 'NASA EOSDIS Global Imagery Browse Services (GIBS)'
+    label: 'High-Resolution Satellite · Banda Aceh Coastal Margin & Tsunami Rebuilt Coast',
+    note: 'Sumatran northwestern coast, Aceh river estuary, and reclaimed tsunami waterline.',
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   chernobyl: {
     file: 'chernobyl-satellite.jpg',
@@ -59,9 +59,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   taj_mahal: {
     file: 'taj-mahal-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Taj Mahal & Yamuna Basin Air Shed',
-    note: 'Indo-Gangetic air inversion and Yamuna river floodplain.',
-    credit: 'NASA EOSDIS GIBS'
+    label: 'High-Resolution Satellite · Taj Mahal, Yamuna River & Charbagh Complex',
+    note: 'Razor-sharp orbital imagery of the white marble dome, minarets, and Yamuna River floodplain.',
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   great_barrier_reef: {
     file: 'great-barrier-reef-satellite.jpg',
@@ -77,9 +77,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   grand_canyon: {
     file: 'grand-canyon-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Grand Canyon & Colorado Plateau',
-    note: 'Hydrological incision and Lake Mead reservoir basin.',
-    credit: 'NASA EOSDIS GIBS'
+    label: 'High-Resolution Satellite · Grand Canyon & Colorado River Gorge',
+    note: 'Geological strata incision, Colorado River gorge, and South Rim plateau.',
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   machu_picchu: {
     file: 'machu-picchu-satellite.jpg',
@@ -109,9 +109,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   whitehaven_beach: {
     file: 'whitehaven-beach-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Whitehaven Silica Beach & Whitsundays',
-    note: '98% pure silica sand spit and barrier reef turquoise lagoon.',
-    credit: 'NASA EOSDIS GIBS'
+    label: 'High-Resolution Satellite · Whitehaven Beach & Hill Inlet Silica Barrier',
+    note: '98% pure silica sand spit and barrier reef turquoise lagoon swirls.',
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   coxs_bazar: {
     file: 'coxs-bazar.jpg',
@@ -129,29 +129,29 @@ export const REGION_IMAGERY = Object.freeze({
   },
   congo_rainforest: {
     file: 'congo-rainforest-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Congo Basin Primary Peatland Canopy',
+    label: 'High-Resolution Satellite · Congo Basin Primary Peatland & Rainforest',
     note: 'Second largest contiguous tropical rainforest on Earth.',
-    credit: 'NASA EOSDIS GIBS'
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   daintree_rainforest: {
     file: 'daintree-rainforest-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Daintree Ancient Wet Tropics Canopy',
+    label: 'High-Resolution Satellite · Daintree Ancient Wet Tropics Canopy',
     note: 'Oldest surviving tropical rainforest on Earth (135+ million years).',
-    credit: 'NASA EOSDIS GIBS'
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   borneo_rainforest: {
     file: 'borneo-rainforest-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Borneo Tropical Peat Swamp & Rainforest',
+    label: 'High-Resolution Satellite · Borneo Tropical Peat Swamp & Rainforest',
     note: 'Ancient Dipterocarp canopy and primary peatland biodiversity.',
-    credit: 'NASA EOSDIS GIBS'
+    credit: 'High-Resolution Earth Observation Satellite'
   },
 
   // --- Catastrophic Landslides & Debris Surges ---
   wayanad_landslide: {
     file: 'wayanad-landslide-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Western Ghats Wayanad Escarpment',
+    label: 'High-Resolution Satellite · Western Ghats Wayanad Escarpment',
     note: 'July 2024 catastrophic monsoon debris avalanche and slope failure.',
-    credit: 'NASA EOSDIS GIBS'
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   oso_landslide: {
     file: 'oso-landslide-satellite.jpg',
@@ -161,15 +161,15 @@ export const REGION_IMAGERY = Object.freeze({
   },
   kedarnath_landslide: {
     file: 'kedarnath-landslide-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Garhwal Himalaya & Kedarnath Valley',
+    label: 'High-Resolution Satellite · Garhwal Himalaya & Kedarnath Valley',
     note: 'Chorabari glacial moraine outburst and catastrophic debris surge.',
-    credit: 'NASA EOSDIS GIBS'
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   zhouqu_landslide: {
     file: 'zhouqu-landslide-satellite.jpg',
-    label: 'NASA GIBS VIIRS TrueColor · Gansu Loess Plateau & Zhouqu River Gorge',
+    label: 'High-Resolution Satellite · Gansu Loess Plateau & Zhouqu River Gorge',
     note: 'Loess soil saturation and mudflow canyon surge.',
-    credit: 'NASA EOSDIS GIBS'
+    credit: 'High-Resolution Earth Observation Satellite'
   },
 
   // --- Critical Biosphere Frontlines ---

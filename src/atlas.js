@@ -224,12 +224,19 @@ export class Atlas {
 
   setRegionTexture(texture, { owned = false } = {}) {
     const layer = this.regionLayer;
-    if (!layer) return;
+    if (!layer || !texture) return;
     if (this.customRegionTexture && this.customRegionTexture !== texture && this.customRegionTextureOwned) {
       this.customRegionTexture.dispose();
     }
     this.customRegionTexture = texture;
     this.customRegionTextureOwned = owned;
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.anisotropy = 16;
+    texture.minFilter = THREE.LinearMipmapLinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.generateMipmaps = true;
+    texture.needsUpdate = true;
     layer.texture = texture;
     layer.material.map = texture;
     layer.material.needsUpdate = true;

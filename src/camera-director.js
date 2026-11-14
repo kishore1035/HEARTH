@@ -330,7 +330,7 @@ export class CameraDirector {
       this.scheduleState(tl, STATES.LOCALITY, t);
       tl.to(
         this.atlasB,
-        { zoom: 1.60, duration: T.dissolve + T.locality, ease: 'power2.out' },
+        { zoom: 1.35, duration: T.dissolve + T.locality, ease: 'power2.out' },
         t
       );
 
@@ -459,7 +459,7 @@ export class CameraDirector {
     } else {
       this.atlasB.u = 0.5;
       this.atlasB.v = 0.5;
-      this.atlasB.zoom = 1.6;
+      this.atlasB.zoom = 1.35;
     }
     this.atlasB.opacity = 1;
 
