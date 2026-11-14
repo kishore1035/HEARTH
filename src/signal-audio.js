@@ -103,6 +103,7 @@ export class SignalAudio {
     this.nextHit = 0;
     this.lightsStep = 0;
     this.userGain = null;
+    this.analyser = null;
     this.muted = false;
     this.volume = 1;
     this.onStateChange = null;
@@ -171,6 +172,7 @@ export class SignalAudio {
       this.ctx = null;
       this.ready = false;
       this.userGain = null;
+    this.analyser = null;
       this.hasRun = false;
       if (ctx && ctx.state !== 'closed') ctx.close().catch(() => {});
       this.failureStatus = error.name === 'NotAllowedError' ? 'blocked' : 'unavailable';
@@ -211,6 +213,13 @@ export class SignalAudio {
     userGain.connect(ctx.destination);
     this.userGain = userGain;
     this.master = master;
+
+    // Real-time audio analyser for frequency & wave HUD
+    const analyser = ctx.createAnalyser();
+    analyser.fftSize = 64;
+    analyser.smoothingTimeConstant = 0.8;
+    userGain.connect(analyser);
+    this.analyser = analyser;
 
     // Shared lush convolution reverb
     const convolver = ctx.createConvolver();
@@ -780,6 +789,7 @@ export class SignalAudio {
     this.ready = false;
     this.initPromise = null;
     this.userGain = null;
+    this.analyser = null;
     this.playRequested = false;
     this.hasPlayed = false;
     this.hasRun = false;

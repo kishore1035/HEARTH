@@ -43,6 +43,7 @@
     <strong>HEARTH</strong>
     <span>Planetary Sonification Observatory</span>
   </div>
+  <button id="tour-btn" class="mast-tour-btn" type="button" aria-label="Start Guided 2-Minute Audio Tour">Guided Tour &#9654;</button>
   <a class="mast-lab-btn" href="./studio.html" aria-label="Open Acoustic Lab">Acoustic Lab <span aria-hidden="true">&#8599;</span></a>
 </header>
 
@@ -52,12 +53,69 @@
 </div>
 
 <section id="audio-controls" class="audio-controls" aria-label="Audio controls" data-loader-inert inert>
+  <canvas id="audio-visualizer" class="audio-visualizer" width="130" height="34" aria-hidden="true" title="Real-time planetary spectrum"></canvas>
   <span id="audio-status" class="audio-status" role="status" aria-live="polite">Audio idle</span>
   <button id="audio-toggle" class="audio-button" type="button" aria-label="Pause audio" hidden>Pause</button>
-  <button id="speak-toggle" class="audio-button" type="button" aria-pressed="false">Voice guide</button>
-  <button id="audio-mute" class="audio-button" type="button" aria-label="Mute audio" aria-pressed="false">Mute</button>
+  <button id="speak-toggle" class="audio-button" type="button" aria-pressed="false" title="Voice Guide (V)">Voice</button>
+  <button id="audio-mute" class="audio-button" type="button" aria-label="Mute audio (M)" aria-pressed="false">Mute</button>
   <input id="audio-volume" class="audio-volume" type="range" min="0" max="1" step="0.01" value="1" aria-label="Audio volume" aria-valuetext="100%" />
+  <button id="audio-export-btn" class="audio-button" type="button" aria-label="Export WAV Audio (E)" title="Export WAV (E)">Export</button>
+  <button id="a11y-toggle-btn" class="audio-button a11y-trigger" type="button" aria-expanded="false" aria-controls="a11y-panel" aria-label="Accessibility &amp; Shortcuts Menu (?)">A11y &#9881;</button>
 </section>
+
+<div id="a11y-panel" class="a11y-panel" role="region" aria-label="Accessibility and Screen Reader Controls" hidden>
+  <div class="a11y-head">
+    <strong>Multi-Sensory Superpowers</strong>
+    <button id="a11y-close-btn" class="a11y-close-btn" type="button" aria-label="Close Accessibility Menu">&times;</button>
+  </div>
+  <div class="a11y-body">
+    <div class="a11y-row">
+      <label for="high-contrast-toggle" class="a11y-label">High Contrast (WCAG AAA)</label>
+      <input id="high-contrast-toggle" class="a11y-checkbox" type="checkbox" />
+    </div>
+    <div class="a11y-row">
+      <label for="speech-rate-select" class="a11y-label">Voice Guide Speed</label>
+      <select id="speech-rate-select" class="a11y-select">
+        <option value="0.75">0.75&times; (Relaxed)</option>
+        <option value="1.0" selected>1.0&times; (Standard)</option>
+        <option value="1.25">1.25&times; (Brisk)</option>
+        <option value="1.5">1.5&times; (Fast)</option>
+        <option value="2.0">2.0&times; (Screen-Reader Power)</option>
+      </select>
+    </div>
+    <div class="a11y-row">
+      <label for="speech-voice-select" class="a11y-label">Synthesized Voice</label>
+      <select id="speech-voice-select" class="a11y-select">
+        <option value="">Default Voice</option>
+      </select>
+    </div>
+    <div class="a11y-row">
+      <label for="earcons-toggle" class="a11y-label">Audio Earcons (UI Cues)</label>
+      <input id="earcons-toggle" class="a11y-checkbox" type="checkbox" checked />
+    </div>
+    <div class="a11y-row">
+      <label for="haptic-toggle" class="a11y-label">Haptic Vibration</label>
+      <input id="haptic-toggle" class="a11y-checkbox" type="checkbox" checked />
+    </div>
+
+    <div class="a11y-shortcuts">
+      <p class="a11y-shortcuts-title">Blind Explorer Keypad Shortcuts:</p>
+      <ul class="a11y-shortcuts-list">
+        <li><kbd>1</kbd>–<kbd>7</kbd> : Jump to Biome Category</li>
+        <li><kbd>P</kbd> : Play / Pause Audio</li>
+        <li><kbd>M</kbd> : Mute / Unmute</li>
+        <li><kbd>C</kbd> : 40-Yr Benchmark Compare</li>
+        <li><kbd>V</kbd> : Speak Climate Summary</li>
+        <li><kbd>H</kbd> : Toggle High-Contrast (WCAG AAA)</li>
+        <li><kbd>T</kbd> : Start/Stop Guided Tour</li>
+        <li><kbd>E</kbd> : 1-Click WAV Audio Export</li>
+        <li><kbd>?</kbd> : Read Keyboard Shortcuts Aloud</li>
+        <li><kbd>&larr;</kbd>/<kbd>&rarr;</kbd> : Step Year Backward / Forward</li>
+      </ul>
+      <button id="read-shortcuts-btn" class="a11y-speak-btn" type="button">Read Shortcuts Aloud</button>
+    </div>
+  </div>
+</div>
 
 <aside id="panel" class="panel" data-sheet="peek" data-view="places" data-search="closed" aria-label="Place explorer" data-loader-inert inert>
   <button id="panel-peek" class="panel-peek" type="button" aria-expanded="false" aria-controls="panel-body">

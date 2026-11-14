@@ -16,6 +16,8 @@ import { ExplorerControls } from './controls.js';
 import { SpaceDive } from './space-dive.js';
 import { UI } from './ui.js';
 import { SignalAudio } from './signal-audio.js';
+import { AudioVisualizer } from './visualizer.js';
+import { GuidedTour } from './tour.js';
 
 const yieldToBrowser = () => new Promise((resolve) => requestAnimationFrame(() => window.setTimeout(resolve, 0)));
 
@@ -74,6 +76,7 @@ class App {
   async init() {
     performance.mark('jukebox:start');
     this.ui = new UI({
+      audio: this.audio,
       onSelect: (region) => this.onSelect(region),
       onBack: () => this.onBack(),
       onSkip: () => this.onSkip(),
@@ -83,6 +86,7 @@ class App {
       onMuteChange: (muted) => this.audio.setMuted(muted),
       onVolumeChange: (volume) => this.audio.setVolume(volume),
       onToggleAudio: () => this.toggleDestinationAudio(),
+      onToggleTour: () => this.tour?.toggle(),
       onSwitchRegion: (region) => this.switchDestinationInAtlas(region),
       onCancelSelection: () => this.cancelSelection(),
       onRetrySelection: () => {
@@ -91,6 +95,23 @@ class App {
     });
     this.audio.onStateChange = (state) => this.ui.setAudioState(state);
     this.ui.setAudioState(this.audio.state);
+
+    // Live Audio Frequency Visualizer HUD
+    const vizCanvas = document.getElementById('audio-visualizer');
+    if (vizCanvas) {
+      this.visualizer = new AudioVisualizer(vizCanvas, this.audio);
+      this.visualizer.start();
+    }
+
+    // 2-Minute Guided Audio Story Tour
+    this.tour = new GuidedTour(this);
+    this.tour.onStatusChange = (status) => {
+      const btn = document.getElementById('tour-btn');
+      if (btn) {
+        btn.classList.toggle('is-active', status.isRunning);
+        btn.textContent = status.isRunning ? `Tour [${status.step}/${status.total}] \u25fc` : 'Guided Tour \u25b6';
+      }
+    };
     if (!this.isWarmReturn) {
       this.loaderEffect = new SpaceDive(document.getElementById('loader-scene'));
       this.loaderEffect.start();
@@ -409,6 +430,10 @@ class App {
     } catch (error) {
       console.warn('Destination imagery unavailable', error);
     }
+  }
+
+  findRegionById(id) {
+    return REGION_BY_ID[id] || null;
   }
 
   onSelect(region) {

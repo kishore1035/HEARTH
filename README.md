@@ -85,7 +85,72 @@ HEARTH expands beyond local telemetry to encompass 28 global frontlines:
 
 ---
 
-## 6. Running Locally
+## 6. Multi-Sensory Superpowers & Inclusive Accessibility
+
+To ensure every user—including completely blind, legally blind, low-vision, neurodivergent, and motor-impaired individuals—can experience the planetary jukebox with total autonomy, HEARTH includes a comprehensive multi-sensory accessibility suite:
+
+### 1. "Blind Explorer" Direct Keypad Navigation
+Operate the entire planetary jukebox without requiring mouse or pointer interaction:
+* **Keypad `1`–`7`**: Jump directly across biome categories:
+  * `1`: Major Incidents & Tsunamis (Chernobyl, Fukushima, Banda Aceh)
+  * `2`: Megafires & Wildfires (California, Amazon, Black Summer)
+  * `3`: Wonders of the World (Pyramids, Taj Mahal, Everest, Grand Canyon)
+  * `4`: Huge Beaches & Coastal Sands (Copacabana, Praia do Cassino, Bondi, Cox's Bazar)
+  * `5`: Great Rainforests of Earth (Amazon, Congo, Daintree, Borneo)
+  * `6`: Catastrophic Landslides (Wayanad, Oso, Kedarnath, Zhouqu)
+  * `7`: Critical Biosphere Frontlines (Sundarbans, Death Valley)
+* **`P`**: Toggle audio playback (Play / Pause).
+* **`M`**: Mute / Unmute planetary audio.
+* **`C`**: Start / Stop 40-year benchmark comparative auditioning.
+* **`V`**: Trigger spoken climate telemetry summary aloud.
+* **`H`**: Toggle WCAG 2.2 AAA Ultra-High Contrast Mode.
+* **`T`**: Start / Stop the 2-Minute Guided Audio Story Tour.
+* **`E`**: 1-Click high-fidelity 16-bit PCM WAV audio export.
+* **`?`**: Read keyboard shortcuts aloud via Speech Synthesis.
+* **`←` / `→`**: Scrub listening year backward and forward (1985–2026).
+
+### 2. Auditory UI "Earcons" (Acoustic Feedback Engine)
+Non-visual acoustic cues synthesized instantaneously using Web Audio:
+* **Enable Ping:** Ascending sine chime ($C_5 \to G_5$, $523 \to 784\text{ Hz}$) when a sound layer is activated.
+* **Disable Tone:** Descending gentle tone ($G_5 \to C_5$, $784 \to 523\text{ Hz}$) when a layer is muted.
+* **Slider Tick:** $1,200\text{ Hz}$ bandpass-filtered micro-click for every annual year step.
+* **Select Chime:** Celestial double-bell arpeggio ($D_5 \to A_5$, $587 \to 880\text{ Hz}$) on destination selection.
+* **Disaster Rumble:** Deep resonant sub-rumble ($70 \to 40\text{ Hz}$) alerting to extreme events and wildfires.
+
+### 3. Tactile / Haptic Vibration Feedback (`navigator.vibrate`)
+Physical feedback for touchscreens, mobile phones, tablets, and supported game controllers:
+* **Milestone Scrub Pulse:** Double-pulse `[30ms, 25ms, 30ms]` across benchmark years (1985, 2000, 2025, 2026).
+* **Disaster Rumble Pulse:** Heavy tremor pattern `[90ms, 40ms, 90ms]` upon selecting catastrophe zones.
+* **Micro-Click Tick:** Short `14ms` tactile click on slider steps and button toggles.
+
+### 4. WCAG 2.2 AAA Ultra-High Contrast Mode
+Engineered specifically for macular degeneration, low vision, and cataract conditions:
+* **Pure Black Background:** `#000000` eliminates backlight glare and eye strain.
+* **Laser Neon Yellow:** `#FFEE00` text providing an exceptional 21:1 contrast ratio (exceeding WCAG AAA 7:1).
+* **Electric Cyan Accents:** `#00FFFF` active indicators with 3px solid high-visibility focus rings.
+* Instant toggle via the **`H`** key or Accessibility Settings panel.
+
+### 5. Screen-Reader Power User Voice & Speech Rate Selector
+* Configurable speech rate dropdown ($0.75\times$, $1.0\times$ standard, $1.25\times$, $1.5\times$, and $2.0\times$ power-user speed).
+* System voice selection dropdown enumerating installed TTS voices.
+* Preferences persist across sessions via `localStorage`.
+
+### 6. Live Canvas Audio Visualizer / Frequency Wave HUD
+* Real-time 24-band frequency spectrum and smooth oscilloscope center wave powered by `AnalyserNode` ($64\text{ FFT}$).
+* Responsive HiDPI Canvas rendering synchronized with audio playback.
+
+### 7. 1-Click High-Fidelity WAV Audio Exporter
+* Captures 6 seconds of live sonification (synthesizer + spatial environment) directly from master user gain.
+* Encodes into uncompressed 16-bit stereo 44.1kHz PCM RIFF `.wav` files with zero compression artifacts.
+* Automatic browser download with descriptive filenames (e.g. `HEARTH_Amazon_Rainforest_Heart_1985.wav`).
+
+### 8. 2-Minute Guided Audio Story Tour
+* Automated 5-stop planetary journey across the globe (Amazon Rainforest, California Wildfires, Wayanad Landslides, Copacabana Coastal Sands, Taj Mahal).
+* Synchronized camera flight, 40-year comparative time scrubbing, and narrated voice storytelling.
+
+---
+
+## 7. Running Locally
 
 HEARTH runs natively in any modern web browser without requiring a bundler, build step, or package manager:
 
@@ -103,7 +168,7 @@ Open your browser to:
 
 ---
 
-## 7. Author & Attribution
+## 8. Author & Attribution
 
 * **Architect & Developer:** **Kishore** ([GitHub @kishore1035](https://github.com/kishore1035))
 * **License:** Released under the [Apache-2.0 License](LICENSE).

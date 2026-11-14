@@ -2,6 +2,8 @@ import { gsap } from '../vendor/gsap/index.js';
 import { REGIONS, COUNTRIES, SIGNALS, YEAR_RANGE, COMPARISON_PAIRS } from './regions.js';
 import { REGION_IMAGERY } from './region-imagery.js';
 import { REGION_ENVIRONMENT_AUDIO } from './signal-audio.js';
+import { playEarcon, triggerHaptic } from './earcons.js';
+import { AudioExporter } from './audio-export.js';
 
 const countryById = Object.fromEntries(COUNTRIES.map((country) => [country.id, country]));
 
@@ -98,7 +100,19 @@ export class UI {
       skipBtn: document.getElementById('skip-btn'),
       hint: document.getElementById('hint'),
       veil: document.getElementById('veil'),
-      veilNoise: document.getElementById('veil-noise')
+      veilNoise: document.getElementById('veil-noise'),
+      audioVisualizer: document.getElementById('audio-visualizer'),
+      exportWavBtn: document.getElementById('audio-export-btn'),
+      a11yToggleBtn: document.getElementById('a11y-toggle-btn'),
+      a11yPanel: document.getElementById('a11y-panel'),
+      a11yCloseBtn: document.getElementById('a11y-close-btn'),
+      highContrastToggle: document.getElementById('high-contrast-toggle'),
+      speechRateSelect: document.getElementById('speech-rate-select'),
+      speechVoiceSelect: document.getElementById('speech-voice-select'),
+      earconsToggle: document.getElementById('earcons-toggle'),
+      hapticToggle: document.getElementById('haptic-toggle'),
+      readShortcutsBtn: document.getElementById('read-shortcuts-btn'),
+      tourBtn: document.getElementById('tour-btn')
     };
 
     this.loaderVisible = true;
@@ -144,6 +158,33 @@ export class UI {
       this.el.speakToggle.disabled = true;
       this.el.speakToggle.title = 'Speech synthesis is not available in this browser.';
     }
+
+    // Multi-sensory accessibility superpowers settings
+    this.earconsEnabled = localStorage.getItem('hearth:earcons') !== '0';
+    this.hapticsEnabled = localStorage.getItem('hearth:haptics') !== '0';
+    this.highContrastEnabled = localStorage.getItem('hearth:highContrast') === '1';
+    this.speechRate = parseFloat(localStorage.getItem('hearth:speechRate') || '1.0');
+    this.speechVoiceUri = localStorage.getItem('hearth:speechVoice') || '';
+    this.selectedVoice = null;
+    this.audioExporter = new AudioExporter(this.handlers.audio);
+
+    if (this.highContrastEnabled) {
+      document.body.classList.add('high-contrast');
+    }
+    if (this.el.highContrastToggle) {
+      this.el.highContrastToggle.checked = this.highContrastEnabled;
+    }
+    if (this.el.earconsToggle) {
+      this.el.earconsToggle.checked = this.earconsEnabled;
+    }
+    if (this.el.hapticToggle) {
+      this.el.hapticToggle.checked = this.hapticsEnabled;
+    }
+    if (this.el.speechRateSelect) {
+      this.el.speechRateSelect.value = String(this.speechRate);
+    }
+
+    this.initVoices();
 
     this.el.yearInput.min = String(YEAR_RANGE.start);
     this.el.yearInput.max = String(YEAR_RANGE.end);
@@ -322,7 +363,21 @@ export class UI {
   }
 
   chooseRegion(region) {
-    if (!this.panelEnabled) return;
+    if (!this.panelEnabled || !region) return;
+    if (this.earconsEnabled) {
+      if (['Megafires & Wildfires', 'Major Incidents & Tsunamis', 'Catastrophic Landslides'].includes(region.category)) {
+        playEarcon('disaster');
+      } else {
+        playEarcon('select');
+      }
+    }
+    if (this.hapticsEnabled) {
+      if (['Megafires & Wildfires', 'Major Incidents & Tsunamis', 'Catastrophic Landslides'].includes(region.category)) {
+        triggerHaptic('disaster');
+      } else {
+        triggerHaptic('select');
+      }
+    }
     this.handlers.onSelect(region);
   }
 
@@ -406,10 +461,13 @@ export class UI {
       ].join('');
       row.addEventListener('click', () => {
         if (!this.panelEnabled || row.disabled) return;
-        if (this.enabledSignals.has(signal.key)) this.enabledSignals.delete(signal.key);
-        else this.enabledSignals.add(signal.key);
+        const nowEnabled = !this.enabledSignals.has(signal.key);
+        if (nowEnabled) this.enabledSignals.add(signal.key);
+        else this.enabledSignals.delete(signal.key);
         this.renderSignals();
-        if (this.handlers.onSignalToggle) this.handlers.onSignalToggle(signal.key, this.enabledSignals.has(signal.key));
+        if (this.handlers.onSignalToggle) this.handlers.onSignalToggle(signal.key, nowEnabled);
+        if (this.earconsEnabled) playEarcon(nowEnabled ? 'enable' : 'disable');
+        if (this.hapticsEnabled) triggerHaptic('click');
       });
       list.appendChild(row);
       this.signalRows.set(signal.key, row);
@@ -668,8 +726,11 @@ export class UI {
     this.speech.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
-    utterance.rate = 1.02;
+    utterance.rate = this.speechRate || 1.0;
     utterance.pitch = 1;
+    if (this.selectedVoice) {
+      utterance.voice = this.selectedVoice;
+    }
     this.speechUtterance = utterance;
     this.speech.speak(utterance);
   }
@@ -699,6 +760,140 @@ export class UI {
       return;
     }
     this.speakSummary();
+  }
+
+  initVoices() {
+    if (!this.speech) return;
+    const populate = () => {
+      const voices = this.speech.getVoices() || [];
+      if (!this.el.speechVoiceSelect) return;
+      this.el.speechVoiceSelect.innerHTML = '<option value="">Default Voice</option>';
+      for (const voice of voices) {
+        if (!voice.lang.startsWith('en')) continue;
+        const opt = document.createElement('option');
+        opt.value = voice.voiceURI;
+        opt.textContent = `${voice.name} (${voice.lang})`;
+        if (voice.voiceURI === this.speechVoiceUri) {
+          opt.selected = true;
+          this.selectedVoice = voice;
+        }
+        this.el.speechVoiceSelect.appendChild(opt);
+      }
+    };
+    populate();
+    if (this.speech.onvoiceschanged !== undefined) {
+      this.speech.onvoiceschanged = populate;
+    }
+  }
+
+  setSpeechRate(rate) {
+    this.speechRate = Number.isFinite(rate) ? rate : 1.0;
+    localStorage.setItem('hearth:speechRate', String(this.speechRate));
+    if (this.el.speechRateSelect) this.el.speechRateSelect.value = String(this.speechRate);
+    this.speak(`Voice guide rate set to ${this.speechRate} speed.`);
+  }
+
+  setSpeechVoice(uri) {
+    this.speechVoiceUri = uri || '';
+    localStorage.setItem('hearth:speechVoice', this.speechVoiceUri);
+    const voices = this.speech ? this.speech.getVoices() : [];
+    this.selectedVoice = voices.find((v) => v.voiceURI === uri) || null;
+    this.speak('Voice profile updated.');
+  }
+
+  toggleHighContrast(force) {
+    this.highContrastEnabled = typeof force === 'boolean' ? force : !this.highContrastEnabled;
+    document.body.classList.toggle('high-contrast', this.highContrastEnabled);
+    localStorage.setItem('hearth:highContrast', this.highContrastEnabled ? '1' : '0');
+    if (this.el.highContrastToggle) this.el.highContrastToggle.checked = this.highContrastEnabled;
+    if (this.hapticsEnabled) triggerHaptic('click');
+    if (this.earconsEnabled) playEarcon(this.highContrastEnabled ? 'enable' : 'disable');
+  }
+
+  toggleA11yPanel(force) {
+    if (!this.el.a11yPanel) return;
+    const isHidden = this.el.a11yPanel.hidden;
+    const shouldOpen = typeof force === 'boolean' ? force : isHidden;
+    this.el.a11yPanel.hidden = !shouldOpen;
+    if (this.el.a11yToggleBtn) {
+      this.el.a11yToggleBtn.setAttribute('aria-expanded', String(shouldOpen));
+    }
+    if (shouldOpen) {
+      this.el.highContrastToggle?.focus();
+    } else {
+      this.el.a11yToggleBtn?.focus();
+    }
+  }
+
+  speakShortcuts() {
+    const text = 'HEARTH Blind Explorer Keypad Shortcuts: Press 1 for Major Incidents, 2 for Wildfires, 3 for Wonders of the World, 4 for Beaches, 5 for Rainforests, 6 for Landslides, 7 for Mangroves. Press P to toggle play or pause. Press M to mute. Press C for 40-year benchmark comparison. Press V to read climate summary. Press H for High Contrast mode. Press T for guided tour. Press E to export WAV audio. Press left and right arrows to step through years.';
+    this.speak(text);
+  }
+
+  jumpToCategory(categoryIndex) {
+    const categories = [
+      'Major Incidents & Tsunamis',
+      'Megafires & Wildfires',
+      'Wonders of the World',
+      'Huge Beaches & Coastal Sands',
+      'Great Rainforests of Earth',
+      'Catastrophic Landslides',
+      'Critical Biosphere Frontlines'
+    ];
+    const targetCat = categories[categoryIndex - 1];
+    if (!targetCat) return;
+
+    const matches = REGIONS.filter((r) => r.category === targetCat || r.group === targetCat);
+    if (!matches.length) return;
+
+    const currentId = this.activeRegion?.id;
+    const currentIdx = matches.findIndex((r) => r.id === currentId);
+    const nextRegion = matches[(currentIdx + 1) % matches.length];
+
+    if (this.activeRegion && this.handlers.onSwitchRegion) {
+      this.handlers.onSwitchRegion(nextRegion);
+    } else {
+      this.chooseRegion(nextRegion);
+    }
+    if (this.speechEnabled) {
+      this.speak(`Category ${categoryIndex}: ${targetCat}. Selected ${nextRegion.name}.`);
+    }
+  }
+
+  async exportAudioWav() {
+    const btn = this.el.exportWavBtn;
+    if (!btn) return;
+    const regionName = this.activeRegion?.name || 'Planetary_Observatory';
+    const year = this.activeYear || 2026;
+
+    try {
+      btn.disabled = true;
+      btn.textContent = 'Recording...';
+      if (this.earconsEnabled) playEarcon('select');
+
+      await this.audioExporter.recordAndDownload({
+        regionName,
+        year,
+        durationSec: 6,
+        onProgress: (ratio, label) => {
+          btn.textContent = label;
+        }
+      });
+
+      btn.textContent = 'Saved WAV!';
+      if (this.earconsEnabled) playEarcon('enable');
+      if (this.hapticsEnabled) triggerHaptic('milestone');
+      if (this.speechEnabled) this.speak(`Downloaded sonification audio for ${regionName}.`);
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Export';
+      }, 2500);
+    } catch (err) {
+      console.warn('WAV export error:', err);
+      btn.disabled = false;
+      btn.textContent = 'Export';
+    }
   }
 
   formatSignal(signal) {
@@ -763,6 +958,13 @@ export class UI {
     if (!fromCompare) this.stopCompare();
     const { first, last } = this.regionYearBounds(this.activeRegion);
     const value = Math.max(first, Math.min(last, Number(year)));
+    if (value !== this.activeYear) {
+      if (this.earconsEnabled) playEarcon('tick');
+      if (this.hapticsEnabled) {
+        if ([1985, 2000, 2025, 2026].includes(value)) triggerHaptic('milestone');
+        else triggerHaptic('click');
+      }
+    }
     this.activeYear = value;
     this.el.yearInput.value = String(value);
     this.el.yearLabel.textContent = String(value);
@@ -917,6 +1119,56 @@ export class UI {
     });
     this.el.speakToggle.addEventListener('click', () => this.setSpeechEnabled(!this.speechEnabled));
 
+    if (this.el.tourBtn) {
+      this.el.tourBtn.addEventListener('click', () => {
+        if (this.handlers.onToggleTour) this.handlers.onToggleTour();
+      });
+    }
+
+    if (this.el.exportWavBtn) {
+      this.el.exportWavBtn.addEventListener('click', () => this.exportAudioWav());
+    }
+
+    if (this.el.a11yToggleBtn) {
+      this.el.a11yToggleBtn.addEventListener('click', () => this.toggleA11yPanel());
+    }
+
+    if (this.el.a11yCloseBtn) {
+      this.el.a11yCloseBtn.addEventListener('click', () => this.toggleA11yPanel(false));
+    }
+
+    if (this.el.highContrastToggle) {
+      this.el.highContrastToggle.addEventListener('change', (e) => this.toggleHighContrast(e.target.checked));
+    }
+
+    if (this.el.speechRateSelect) {
+      this.el.speechRateSelect.addEventListener('change', (e) => this.setSpeechRate(parseFloat(e.target.value)));
+    }
+
+    if (this.el.speechVoiceSelect) {
+      this.el.speechVoiceSelect.addEventListener('change', (e) => this.setSpeechVoice(e.target.value));
+    }
+
+    if (this.el.earconsToggle) {
+      this.el.earconsToggle.addEventListener('change', (e) => {
+        this.earconsEnabled = e.target.checked;
+        localStorage.setItem('hearth:earcons', e.target.checked ? '1' : '0');
+        if (this.earconsEnabled) playEarcon('enable');
+      });
+    }
+
+    if (this.el.hapticToggle) {
+      this.el.hapticToggle.addEventListener('change', (e) => {
+        this.hapticsEnabled = e.target.checked;
+        localStorage.setItem('hearth:haptics', e.target.checked ? '1' : '0');
+        if (this.hapticsEnabled) triggerHaptic('click');
+      });
+    }
+
+    if (this.el.readShortcutsBtn) {
+      this.el.readShortcutsBtn.addEventListener('click', () => this.speakShortcuts());
+    }
+
     this.el.backBtn.addEventListener('click', () => this.handlers.onBack());
     this.el.skipBtn.addEventListener('click', () => this.handlers.onSkip());
 
@@ -948,22 +1200,91 @@ export class UI {
   onGlobalKey(event) {
     if (this.loaderVisible || !this.panelEnabled || event.defaultPrevented) return;
     const target = event.target;
-    if (target instanceof Node && this.el.audioControls.contains(target)) return;
     const tag = target && target.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (target && target.isContentEditable)) return;
+    const isTextInput = (tag === 'INPUT' && target.type !== 'checkbox' && target.type !== 'range') || tag === 'TEXTAREA' || (target && target.isContentEditable);
+    if (isTextInput) return;
 
-    if (!this.el.signalsView.hidden) {
-      if (event.key === 'ArrowLeft') {
+    // Check Escape to close A11y panel or cancel speech
+    if (event.key === 'Escape') {
+      if (this.el.a11yPanel && !this.el.a11yPanel.hidden) {
         event.preventDefault();
-        this.setYear(this.activeYear - 1);
-      } else if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        this.setYear(this.activeYear + 1);
-      } else if ((event.key === 'c' || event.key === 'C') && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        event.preventDefault();
-        this.toggleCompare();
-        if (this.handlers.onCompare) this.handlers.onCompare(this.compareTimer !== null);
+        this.toggleA11yPanel(false);
+        return;
       }
+    }
+
+    // Question Mark / Shift + /: Read Shortcuts Aloud
+    if (event.key === '?' || (event.key === '/' && event.shiftKey)) {
+      event.preventDefault();
+      this.speakShortcuts();
+      return;
+    }
+
+    // H: Toggle WCAG AAA High Contrast Mode
+    if ((event.key === 'h' || event.key === 'H') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      this.toggleHighContrast();
+      return;
+    }
+
+    // T: Toggle Guided Tour
+    if ((event.key === 't' || event.key === 'T') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      if (this.handlers.onToggleTour) this.handlers.onToggleTour();
+      return;
+    }
+
+    // E: Export WAV Audio
+    if ((event.key === 'e' || event.key === 'E') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      this.exportAudioWav();
+      return;
+    }
+
+    // P: Toggle Audio Play / Pause
+    if ((event.key === 'p' || event.key === 'P') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      if (this.handlers.onToggleAudio) this.handlers.onToggleAudio();
+      return;
+    }
+
+    // M: Toggle Mute
+    if ((event.key === 'm' || event.key === 'M') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      if (this.handlers.onMuteChange) this.handlers.onMuteChange(!this.audioState.muted);
+      return;
+    }
+
+    // V: Voice Guide Summary
+    if ((event.key === 'v' || event.key === 'V') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      this.setSpeechEnabled(!this.speechEnabled);
+      return;
+    }
+
+    // C: Toggle 40-year Comparison
+    if ((event.key === 'c' || event.key === 'C') && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      this.toggleCompare();
+      if (this.handlers.onCompare) this.handlers.onCompare(this.compareTimer !== null);
+      return;
+    }
+
+    // Keypad numbers 1-7: Jump directly to Biome Category
+    if (['1', '2', '3', '4', '5', '6', '7'].includes(event.key)) {
+      event.preventDefault();
+      this.jumpToCategory(parseInt(event.key, 10));
+      return;
+    }
+
+    // Arrow Left / Right: Year step
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.setYear(this.activeYear - 1);
+      return;
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.setYear(this.activeYear + 1);
       return;
     }
 
@@ -988,8 +1309,6 @@ export class UI {
         this.setSheetState('half', { focus: true });
         return;
       }
-      // Select from the list or from an unfocused page. Other buttons (group
-      // headers, clear-search) keep their native Enter behaviour.
       const isRow = target && target.classList && target.classList.contains('region-row');
       const isBody = !target || target === document.body;
       if (!isRow && !isBody) return;
