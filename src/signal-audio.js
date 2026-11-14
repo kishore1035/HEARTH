@@ -13,7 +13,16 @@ const clamp01 = (value) => (value < 0 ? 0 : value > 1 ? 1 : value);
 
 // Dataset ranges for normalized audio mapping
 const AUDIO_RANGES = {
-  rain: [0, 6000]
+  temperature: [-25, 54],
+  rain: [0, 6000],
+  vegetation: [0.05, 0.95],
+  canopy: [0, 35],
+  groundwater: [-35, 25],
+  seaLevel: [0, 300],
+  air: [5, 120],
+  carbon: [335, 445],
+  lights: [0, 100],
+  disasters: [0, 35]
 };
 
 function normalise(value, range) {
@@ -46,46 +55,46 @@ function makeImpulse(ctx, seconds = 3.2, decay = 2.4) {
 // Full 28-destination dedicated spatial environmental soundscape mapping
 export const REGION_ENVIRONMENT_AUDIO = Object.freeze({
   // --- Major Incidents & Tsunamis ---
-  tohoku_fukushima: { file: 'fukushima-tsunami.wav', name: 'Pacific Tsunami Surge, Concrete Seawall & Warning Bell', volume: 0.7 },
-  banda_aceh: { file: 'banda-aceh-surf.wav', name: 'Indian Ocean Breakers & Tropical Rebuilt Shoreline', volume: 0.7 },
-  chernobyl: { file: 'chernobyl-ruins.wav', name: 'Pripyat Exclusion Zone Whistling Ruins & Geiger Clicks', volume: 0.65 },
-  venice_lagoon: { file: 'venice-canal.wav', name: 'Venetian Canal Water Lap & Distant Church Bell', volume: 0.68 },
+  tohoku_fukushima: { file: 'fukushima-tsunami.wav', name: 'Pacific Tsunami Surge, Concrete Seawall & Warning Bell', volume: 0.24 },
+  banda_aceh: { file: 'banda-aceh-surf.wav', name: 'Indian Ocean Breakers & Tropical Rebuilt Shoreline', volume: 0.25 },
+  chernobyl: { file: 'chernobyl-ruins.wav', name: 'Pripyat Exclusion Zone Whistling Ruins & Geiger Clicks', volume: 0.22 },
+  venice_lagoon: { file: 'venice-canal.wav', name: 'Venetian Canal Water Lap & Distant Church Bell', volume: 0.24 },
 
   // --- Megafires & Wildfires ---
-  california_wildfires: { file: 'wildfire-loop.ogg', name: 'Sierra Pine Forest Crown Fire & Timber Blaze', volume: 0.75 },
-  australia_black_summer: { file: 'wildfire-loop.ogg', name: 'Black Summer Eucalyptus Bushfire Frontline & Ember Roar', volume: 0.75 },
-  amazon_basin: { file: 'wildfire-loop.ogg', name: 'Amazon Basin Deforestation Arc Burning Timber & Smoke', volume: 0.72 },
+  california_wildfires: { file: 'wildfire-loop.ogg', name: 'Sierra Pine Forest Crown Fire & Timber Blaze', volume: 0.26 },
+  australia_black_summer: { file: 'wildfire-loop.ogg', name: 'Black Summer Eucalyptus Bushfire Frontline & Ember Roar', volume: 0.26 },
+  amazon_basin: { file: 'wildfire-loop.ogg', name: 'Amazon Basin Deforestation Arc Burning Timber & Smoke', volume: 0.25 },
 
   // --- Wonders of the World ---
-  pyramids_giza: { file: 'giza-desert-wind.wav', name: 'Giza Plateau Sahara Desert Wind & Limestone Corridors', volume: 0.65 },
-  taj_mahal: { file: 'taj-sitar-yaman.ogg', name: 'Yamuna Riverbank & Sacred Sitar Raga Yaman', volume: 0.68 },
-  great_barrier_reef: { file: 'barrier-reef-marine.wav', name: 'Coral Sea Reef Lagoon Hydrophone & Tropical Swell', volume: 0.68 },
-  mount_everest: { file: 'everest-howling-wind.ogg', name: 'Himalayan Khumbu Ridge & 8000m Alpine Blizzard Gale', volume: 0.7 },
-  grand_canyon: { file: 'grand-canyon-echo.wav', name: 'Colorado River Gorge Cavernous Red-Rock Echoes', volume: 0.65 },
-  machu_picchu: { file: 'machu-picchu-andes.wav', name: 'Andean Mountain Peak Mist & Sacred Quena Flute', volume: 0.65 },
-  victoria_falls: { file: 'victoria-waterfall.ogg', name: 'Mosi-oa-Tunya Cataract Roar & White Water Deluge', volume: 0.72 },
+  pyramids_giza: { file: 'giza-desert-wind.wav', name: 'Giza Plateau Sahara Desert Wind & Limestone Corridors', volume: 0.22 },
+  taj_mahal: { file: 'taj-sitar-yaman.ogg', name: 'Yamuna Riverbank & Sacred Sitar Raga Yaman', volume: 0.26 },
+  great_barrier_reef: { file: 'barrier-reef-marine.wav', name: 'Coral Sea Reef Lagoon Hydrophone & Tropical Swell', volume: 0.24 },
+  mount_everest: { file: 'everest-howling-wind.ogg', name: 'Himalayan Khumbu Ridge & 8000m Alpine Blizzard Gale', volume: 0.24 },
+  grand_canyon: { file: 'grand-canyon-echo.wav', name: 'Colorado River Gorge Cavernous Red-Rock Echoes', volume: 0.22 },
+  machu_picchu: { file: 'machu-picchu-andes.wav', name: 'Andean Mountain Peak Mist & Sacred Quena Flute', volume: 0.24 },
+  victoria_falls: { file: 'victoria-waterfall.ogg', name: 'Mosi-oa-Tunya Cataract Roar & White Water Deluge', volume: 0.25 },
 
   // --- Huge Beaches & Oceanic Coastal Sands ---
-  praia_do_cassino: { file: 'praia-cassino-roar.wav', name: '240km South Atlantic Endless Rolling Ocean Roar', volume: 0.75 },
-  coxs_bazar: { file: 'ocean-loop.ogg', name: 'Bay of Bengal 120km Intertidal Surf & Coastal Gale', volume: 0.75 },
-  copacabana_beach: { file: 'ocean-loop.ogg', name: 'Copacabana Atlantic Shoreline Waves & Surf Breakers', volume: 0.72 },
-  whitehaven_beach: { file: 'whitehaven-silica.wav', name: 'Whitsunday Coral Sand Shore & Gentle Silica Lap', volume: 0.65 },
+  praia_do_cassino: { file: 'praia-cassino-roar.wav', name: '240km South Atlantic Endless Rolling Ocean Roar', volume: 0.26 },
+  coxs_bazar: { file: 'ocean-loop.ogg', name: 'Bay of Bengal 120km Intertidal Surf & Coastal Gale', volume: 0.26 },
+  copacabana_beach: { file: 'ocean-loop.ogg', name: 'Copacabana Atlantic Shoreline Waves & Surf Breakers', volume: 0.25 },
+  whitehaven_beach: { file: 'whitehaven-silica.wav', name: 'Whitsunday Coral Sand Shore & Gentle Silica Lap', volume: 0.22 },
 
   // --- Ancient & Lush Rainforests ---
-  amazon_rainforest: { file: 'rainforest-loop.ogg', name: 'Amazon Primary Rainforest Canopy Wildlife & Rain', volume: 0.75 },
-  congo_rainforest: { file: 'congo-jungle-night.wav', name: 'Congo Basin Primary Rainforest Night Insect Choir & Drip', volume: 0.72 },
-  daintree_rainforest: { file: 'forest-birds.ogg', name: 'Daintree Ancient Tropical Rainforest Canopy & Creek', volume: 0.7 },
-  borneo_rainforest: { file: 'borneo-swamp-chorus.wav', name: 'Borneo Tropical Peat Swamp & Treefrog Choir', volume: 0.72 },
+  amazon_rainforest: { file: 'rainforest-loop.ogg', name: 'Amazon Primary Rainforest Canopy Wildlife & Rain', volume: 0.26 },
+  congo_rainforest: { file: 'congo-jungle-night.wav', name: 'Congo Basin Primary Rainforest Night Insect Choir & Drip', volume: 0.24 },
+  daintree_rainforest: { file: 'forest-birds.ogg', name: 'Daintree Ancient Tropical Rainforest Canopy & Creek', volume: 0.24 },
+  borneo_rainforest: { file: 'borneo-swamp-chorus.wav', name: 'Borneo Tropical Peat Swamp & Treefrog Choir', volume: 0.24 },
 
   // --- Catastrophic Landslides & Mountain Disasters ---
-  wayanad_landslide: { file: 'wayanad-landslide.wav', name: 'Western Ghats Monsoon Cloudburst & Mountain Torrent', volume: 0.72 },
-  oso_landslide: { file: 'rain-thunder.ogg', name: 'Pacific Northwest River Valley Downpour & Thunder', volume: 0.7 },
-  kedarnath_landslide: { file: 'kedarnath-debris.wav', name: 'Mandakini Valley Glacial Flood & Roaring River Rapids', volume: 0.72 },
-  zhouqu_landslide: { file: 'wayanad-landslide.wav', name: 'Bailong River Mountain Canyon Mud Torrent & Deluge', volume: 0.7 },
+  wayanad_landslide: { file: 'wayanad-landslide.wav', name: 'Western Ghats Monsoon Cloudburst & Mountain Torrent', volume: 0.25 },
+  oso_landslide: { file: 'rain-thunder.ogg', name: 'Pacific Northwest River Valley Downpour & Thunder', volume: 0.25 },
+  kedarnath_landslide: { file: 'kedarnath-debris.wav', name: 'Mandakini Valley Glacial Flood & Roaring River Rapids', volume: 0.25 },
+  zhouqu_landslide: { file: 'wayanad-landslide.wav', name: 'Bailong River Mountain Canyon Mud Torrent & Deluge', volume: 0.25 },
 
   // --- Critical Biosphere Frontlines ---
-  death_valley: { file: 'death-valley-heat.wav', name: 'Badwater Basin Shimmering Thermal Arid Drafts', volume: 0.62 },
-  sundarbans: { file: 'sundarbans-mangrove.wav', name: 'Sundarbans Mangrove Tidal Estuary Swirl & Delta Breeze', volume: 0.68 }
+  death_valley: { file: 'death-valley-heat.wav', name: 'Badwater Basin Shimmering Thermal Arid Drafts', volume: 0.20 },
+  sundarbans: { file: 'sundarbans-mangrove.wav', name: 'Sundarbans Mangrove Tidal Estuary Swirl & Delta Breeze', volume: 0.24 }
 });
 
 export class SignalAudio {
@@ -136,6 +145,10 @@ export class SignalAudio {
     };
   }
 
+  get isPlaying() {
+    return this.playRequested && this.ctx?.state === 'running';
+  }
+
   emitState() {
     this.onStateChange?.(this.state);
   }
@@ -143,8 +156,9 @@ export class SignalAudio {
   applyUserGain() {
     if (!this.userGain || this.ctx?.state === 'closed') return;
     const gain = this.userGain.gain;
+    const target = this.muted ? 0.0001 : Math.max(0.0001, this.volume);
     gain.cancelScheduledValues(this.now);
-    gain.setValueAtTime(this.muted ? 0 : this.volume, this.now);
+    gain.setTargetAtTime(target, this.now, 0.02);
   }
 
   setMuted(muted) {
@@ -490,8 +504,29 @@ export class SignalAudio {
     return this.ctx ? this.ctx.currentTime : 0;
   }
 
+  computeRegionBounds(region) {
+    if (!region || !region.years) return {};
+    const bounds = {};
+    for (const signal of SIGNALS) {
+      bounds[signal.key] = { min: Infinity, max: -Infinity };
+    }
+    for (const y of Object.keys(region.years)) {
+      const row = region.years[y];
+      if (!row) continue;
+      for (const signal of SIGNALS) {
+        const val = row[signal.key];
+        if (typeof val === 'number' && !Number.isNaN(val)) {
+          if (val < bounds[signal.key].min) bounds[signal.key].min = val;
+          if (val > bounds[signal.key].max) bounds[signal.key].max = val;
+        }
+      }
+    }
+    return bounds;
+  }
+
   setDestination(region) {
     this.region = region || null;
+    this.regionBounds = this.computeRegionBounds(region);
     if (!region) {
       this.playRequested = false;
       this.stopEnvironment();
@@ -502,21 +537,21 @@ export class SignalAudio {
     this.emitState();
   }
 
-  setYear(year) {
+  setYear(year, glide = 0.08) {
     this.year = Number(year);
     this.readValues();
-    if (this.ready) this.apply(this.now);
+    if (this.ready) this.apply(this.now, glide);
   }
 
   setEnabled(key, on) {
     if (on) this.enabled.add(key);
     else this.enabled.delete(key);
-    if (this.ready) this.apply(this.now);
+    if (this.ready) this.apply(this.now, 0.08);
   }
 
   setEnabledSet(keys) {
     this.enabled = new Set(keys);
-    if (this.ready) this.apply(this.now);
+    if (this.ready) this.apply(this.now, 0.08);
   }
 
   isAvailable(key) {
@@ -527,66 +562,135 @@ export class SignalAudio {
 
   readValues() {
     const norms = {};
+    const localNorms = {};
     for (const signal of SIGNALS) {
       if (!this.region || !this.isAvailable(signal.key)) {
         norms[signal.key] = null;
+        localNorms[signal.key] = null;
         continue;
       }
       const row = this.region.years[this.year];
       const value = row ? row[signal.key] : null;
-      norms[signal.key] = normalise(value, AUDIO_RANGES[signal.key] || signal.range);
+      if (typeof value === 'number' && !Number.isNaN(value)) {
+        norms[signal.key] = normalise(value, AUDIO_RANGES[signal.key] || signal.range);
+        const b = this.regionBounds?.[signal.key];
+        if (b && b.max > b.min) {
+          localNorms[signal.key] = clamp01((value - b.min) / (b.max - b.min));
+        } else {
+          localNorms[signal.key] = 0.5;
+        }
+      } else {
+        norms[signal.key] = null;
+        localNorms[signal.key] = null;
+      }
     }
     this.norms = norms;
+    this.localNorms = localNorms;
   }
 
-  apply(now = this.now) {
+  apply(now = this.now, glide = 0.25) {
     if (!this.ready) return;
     const n = this.norms;
+    const ln = this.localNorms || n;
     const on = (key) => this.enabled.has(key) && n[key] !== null && n[key] !== undefined;
-    const glide = 0.45;
 
-    // Temperature: Gentle celestial sine melody, octave glide
-    const temp = on('temperature') ? n.temperature : null;
-    this.lead.frequency.setTargetAtTime(164.81 * Math.pow(3, temp === null ? 0 : temp), now, glide);
-    this.leadGain.gain.setTargetAtTime(temp === null ? 0 : 0.038, now, glide);
+    // Temperature: Celestial sine melody with expressive 42-year musical sweep
+    // Combines global climate anchor (160Hz alpine cold -> 360Hz tropical heat) with clear local trajectory
+    if (on('temperature')) {
+      const gTemp = n.temperature;
+      const lTemp = ln.temperature !== null ? ln.temperature : 0.5;
+      const baseFreq = 160 * Math.pow(2.2, gTemp);
+      const freq = baseFreq * Math.pow(1.68, lTemp);
+      this.lead.frequency.setTargetAtTime(freq, now, glide);
+      this.leadGain.gain.setTargetAtTime(0.24, now, glide);
+    } else {
+      this.leadGain.gain.setTargetAtTime(0, now, glide);
+    }
 
     // Vegetation: Silk ambient harmonic pad brightness
-    const veg = on('vegetation') ? n.vegetation : null;
-    this.padFilter.frequency.setTargetAtTime(280 + (veg === null ? 0 : veg) * 650, now, glide);
-    this.padGain.gain.setTargetAtTime(veg === null ? 0 : 0.035 + veg * 0.045, now, glide);
+    if (on('vegetation')) {
+      const gVeg = n.vegetation;
+      const lVeg = ln.vegetation !== null ? ln.vegetation : 0.5;
+      const cutoff = 260 + (gVeg * 0.35 + lVeg * 0.65) * 880;
+      this.padFilter.frequency.setTargetAtTime(cutoff, now, glide);
+      this.padGain.gain.setTargetAtTime(0.12 + (gVeg * 0.4 + lVeg * 0.6) * 0.12, now, glide);
+    } else {
+      this.padGain.gain.setTargetAtTime(0, now, glide);
+    }
 
     // Groundwater: Sub-bass body
-    const ground = on('groundwater') ? n.groundwater : null;
-    this.sub.frequency.setTargetAtTime(45 + (ground === null ? 0 : ground) * 35, now, glide);
-    this.subGain.gain.setTargetAtTime(ground === null ? 0 : 0.02 + ground * 0.045, now, glide);
+    if (on('groundwater')) {
+      const gGround = n.groundwater;
+      const lGround = ln.groundwater !== null ? ln.groundwater : 0.5;
+      const subFreq = 42 + (gGround * 0.4 + lGround * 0.6) * 44;
+      this.sub.frequency.setTargetAtTime(subFreq, now, glide);
+      this.subGain.gain.setTargetAtTime(0.14 + (1 - lGround) * 0.12, now, glide);
+    } else {
+      this.subGain.gain.setTargetAtTime(0, now, glide);
+    }
 
     // Sea level: Ocean wave wash
-    const sea = on('seaLevel') ? n.seaLevel : null;
-    this.seaFilter.frequency.setTargetAtTime(240 + (sea === null ? 0 : sea) * 450, now, glide);
-    this.seaGain.gain.setTargetAtTime(sea === null ? 0 : 0.008 + sea * 0.035, now, glide);
+    if (on('seaLevel')) {
+      const gSea = n.seaLevel;
+      const lSea = ln.seaLevel !== null ? ln.seaLevel : 0.5;
+      this.seaFilter.frequency.setTargetAtTime(220 + (gSea * 0.4 + lSea * 0.6) * 550, now, glide);
+      this.seaGain.gain.setTargetAtTime(0.08 + lSea * 0.10, now, glide);
+    } else {
+      this.seaGain.gain.setTargetAtTime(0, now, glide);
+    }
 
     // Air quality: Wind breath
-    const air = on('air') ? n.air : null;
-    this.airFilter.frequency.setTargetAtTime(900 + (air === null ? 0 : air) * 600, now, glide);
-    this.airGain.gain.setTargetAtTime(air === null ? 0 : 0.004 + air * 0.025, now, glide);
+    if (on('air')) {
+      const gAir = n.air;
+      const lAir = ln.air !== null ? ln.air : 0.5;
+      this.airFilter.frequency.setTargetAtTime(800 + (gAir * 0.4 + lAir * 0.6) * 800, now, glide);
+      this.airGain.gain.setTargetAtTime(0.06 + lAir * 0.09, now, glide);
+    } else {
+      this.airGain.gain.setTargetAtTime(0, now, glide);
+    }
 
     // Canopy: Reverb depth
-    const canopy = on('canopy') ? n.canopy : null;
-    this.reverbWet.gain.setTargetAtTime(canopy === null ? 0.04 : 0.08 + canopy * 0.55, now, 0.5);
+    const canopy = on('canopy') ? (ln.canopy !== null ? ln.canopy : n.canopy) : null;
+    const wet = canopy === null ? 0.04 : 0.05 + canopy * 0.28;
+    this.reverbWet.gain.setTargetAtTime(wet, now, 0.4);
 
-    // Carbon: Subtle celestial micro-detune
-    const carbon = on('carbon') ? n.carbon : null;
-    const cents = carbon === null ? 0 : carbon * 22;
+    // Carbon: Atmospheric greenhouse detuning tension
+    const carbon = on('carbon') ? (ln.carbon !== null ? ln.carbon : n.carbon) : null;
+    const cents = carbon === null ? 0 : carbon * 32;
     for (const voice of this.padVoices) voice.detune.setTargetAtTime(cents, now, 0.5);
     this.lead.detune.setTargetAtTime(cents, now, 0.5);
 
-    this.rates.rain = on('rain') ? 0.3 + n.rain * 4.5 : 0;
-    this.rates.lights = on('lights') ? 1.2 + n.lights * 5 : 0;
-    this.rates.disasters = on('disasters') ? 0.05 + n.disasters * 0.85 : 0;
+    // Rain droplet pluck rate
+    if (on('rain')) {
+      const lRain = ln.rain !== null ? ln.rain : n.rain;
+      this.rates.rain = 0.4 + (n.rain * 0.3 + lRain * 0.7) * 5.2;
+      this.rainBus.gain.setTargetAtTime(0.85, now, 0.1);
+    } else {
+      this.rates.rain = 0;
+      this.rainBus.gain.setTargetAtTime(0, now, 0.1);
+    }
 
-    this.rainBus.gain.setTargetAtTime(on('rain') ? 0.55 : 0, now, 0.2);
-    this.lightsBus.gain.setTargetAtTime(on('lights') ? 0.45 : 0, now, 0.2);
-    this.hitBus.gain.setTargetAtTime(on('disasters') ? 0.5 : 0, now, 0.2);
+    // Night lights arpeggiator rate
+    if (on('lights')) {
+      const lLights = ln.lights !== null ? ln.lights : n.lights;
+      this.rates.lights = 0.8 + (n.lights * 0.3 + lLights * 0.7) * 5.8;
+      this.lightsBus.gain.setTargetAtTime(0.75, now, 0.1);
+    } else {
+      this.rates.lights = 0;
+      this.lightsBus.gain.setTargetAtTime(0, now, 0.1);
+    }
+
+    // Disasters percussion hits
+    if (on('disasters')) {
+      const lDis = ln.disasters !== null ? ln.disasters : n.disasters;
+      this.rates.disasters = 0.04 + (n.disasters * 0.3 + lDis * 0.7) * 0.95;
+      this.hitBus.gain.setTargetAtTime(0.85, now, 0.1);
+    } else {
+      this.rates.disasters = 0;
+      this.hitBus.gain.setTargetAtTime(0, now, 0.1);
+    }
+    this.lightsBus.gain.setTargetAtTime(on('lights') ? 0.75 : 0, now, 0.1);
+    this.hitBus.gain.setTargetAtTime(on('disasters') ? 0.85 : 0, now, 0.1);
   }
 
   async togglePlay() {
@@ -601,21 +705,25 @@ export class SignalAudio {
     try {
       await this.start();
       if (!this.region || this.state.status === 'unavailable') return;
-      this.fadeIn(0.6);
+      await this.fadeIn(0.6);
     } catch (error) {
       console.warn('Audio unavailable', error);
       this.emitState();
     }
   }
 
-  fadeIn(seconds = 1.6) {
+  async fadeIn(seconds = 1.6) {
     if (this.ready && this.ctx.state !== 'closed' && this.region) {
+      if (this.ctx.state === 'suspended') {
+        try { await this.ctx.resume(); } catch {}
+      }
       const now = this.now;
       this.master.gain.cancelScheduledValues(now);
       this.master.gain.setValueAtTime(Math.max(0.0001, this.master.gain.value), now);
       this.master.gain.exponentialRampToValueAtTime(0.85, now + seconds);
       this.playRequested = true;
       this.hasPlayed = true;
+      this.apply(now);
       this.playEnvironmentForRegion(this.region);
     }
     this.emitState();
@@ -725,7 +833,7 @@ export class SignalAudio {
     filter.frequency.setValueAtTime(520, time);
 
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.04, time + 0.008);
+    gain.gain.linearRampToValueAtTime(0.18, time + 0.008);
     gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.22);
 
     osc.connect(filter);
@@ -752,7 +860,7 @@ export class SignalAudio {
     filter.frequency.setValueAtTime(780, time);
 
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.024, time + 0.012);
+    gain.gain.linearRampToValueAtTime(0.14, time + 0.012);
     gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.38);
 
     osc.connect(filter);

@@ -71,9 +71,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   mount_everest: {
     file: 'everest-satellite.jpg',
-    label: 'High-Resolution Satellite · Mount Everest, Khumbu Glacier & Nuptse Ridge',
-    note: 'Glacial cryosphere, moraine streams, and 8,848m alpine rock ridges.',
-    credit: 'High-Resolution Earth Observation Satellite'
+    label: 'NASA Astronaut Photography ISS066 · Mount Everest Summit & Khumbu Glacier',
+    note: 'International Space Station astronaut photography of the 8,848m Everest pyramid, Khumbu icefall, and glaciated cirques.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   grand_canyon: {
     file: 'grand-canyon-satellite.jpg',

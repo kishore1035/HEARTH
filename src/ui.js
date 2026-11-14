@@ -763,7 +763,7 @@ export class UI {
   setSpeechEnabled(on) {
     this.speechEnabled = Boolean(on) && Boolean(this.speech);
     this.el.speakToggle.setAttribute('aria-pressed', String(this.speechEnabled));
-    this.el.speakToggle.textContent = this.speechEnabled ? 'Voice guide on' : 'Voice guide';
+    this.el.speakToggle.textContent = this.speechEnabled ? 'Voice: On' : 'Voice';
     if (!this.speechEnabled) {
       window.clearTimeout(this.speechTimer);
       this.cancelSpeech();
@@ -1073,7 +1073,9 @@ export class UI {
     this.el.mapRetry.addEventListener('click', () => this.handlers.onRetrySelection?.());
     this.el.mapCancel.addEventListener('click', () => this.handlers.onCancelSelection?.());
     this.el.audioMute.addEventListener('click', () => this.handlers.onMuteChange?.(!this.audioState.muted));
-    this.el.audioVolume.addEventListener('input', () => this.handlers.onVolumeChange?.(Number(this.el.audioVolume.value)));
+    const handleVolume = () => this.handlers.onVolumeChange?.(Number(this.el.audioVolume.value));
+    this.el.audioVolume.addEventListener('input', handleVolume);
+    this.el.audioVolume.addEventListener('change', handleVolume);
     this.el.audioToggle.addEventListener('click', () => this.handlers.onToggleAudio?.());
     this.el.signalRegion.addEventListener('click', () => this.setRegionSwitcherOpen(!this.regionSwitcherOpen, { focus: true }));
     this.el.regionSwitcherToggle.addEventListener('click', () => this.setRegionSwitcherOpen(!this.regionSwitcherOpen, { focus: true }));
@@ -1106,7 +1108,9 @@ export class UI {
     });
     this.mq.addEventListener('change', (event) => this.onMobileChange(event));
 
-    this.el.yearInput.addEventListener('input', () => this.setYear(this.el.yearInput.value));
+    const handleYear = () => this.setYear(this.el.yearInput.value);
+    this.el.yearInput.addEventListener('input', handleYear);
+    this.el.yearInput.addEventListener('change', handleYear);
     this.el.play1985.addEventListener('click', () => {
       this.setYear(this.compareYearA);
       if (this.handlers.onPlay) this.handlers.onPlay(this.compareYearA);

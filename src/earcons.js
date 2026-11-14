@@ -2,6 +2,12 @@
 // Provides instantaneous, non-intrusive acoustic & vibration cues for accessibility.
 
 let earconCtx = null;
+let sharedDest = null;
+
+export function setEarconContext(ctx, destination = null) {
+  earconCtx = ctx;
+  sharedDest = destination;
+}
 
 function getEarconContext() {
   if (!earconCtx) {
@@ -18,14 +24,18 @@ function getEarconContext() {
 
 /**
  * Synthesizes instantaneous, gentle acoustic feedback for UI actions.
- * @param {'enable' | 'disable' | 'tick' | 'select' | 'disaster'} type
+ * @param {'enable' | 'disable' | 'tick' | 'milestone' | 'select' | 'disaster'} type
  */
 export function playEarcon(type) {
   try {
     const ctx = getEarconContext();
     if (!ctx || ctx.state === 'closed') return;
+    if (ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
 
     const now = ctx.currentTime;
+    const dest = sharedDest || ctx.destination;
 
     if (type === 'enable') {
       // Ascending gentle ping (C5 523.25 Hz -> G5 783.99 Hz)
@@ -36,11 +46,11 @@ export function playEarcon(type) {
       osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.08);
 
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(0.08, now + 0.015);
+      gain.gain.linearRampToValueAtTime(0.20, now + 0.012);
       gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
 
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(dest);
       osc.start(now);
       osc.stop(now + 0.19);
     } else if (type === 'disable') {
@@ -52,35 +62,57 @@ export function playEarcon(type) {
       osc.frequency.exponentialRampToValueAtTime(523.25, now + 0.09);
 
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(0.06, now + 0.015);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+      gain.gain.linearRampToValueAtTime(0.16, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
 
       osc.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(dest);
       osc.start(now);
-      osc.stop(now + 0.16);
+      osc.stop(now + 0.17);
     } else if (type === 'tick') {
-      // Micro-click tick for slider scrubbing (~20ms)
+      // Snappy woodblock / tactile mechanical click (~25ms)
       const osc = ctx.createOscillator();
       const filter = ctx.createBiquadFilter();
       const gain = ctx.createGain();
 
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(1200, now);
+      osc.frequency.setValueAtTime(1100, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 0.025);
 
       filter.type = 'bandpass';
       filter.frequency.setValueAtTime(1400, now);
-      filter.Q.setValueAtTime(3.5, now);
+      filter.Q.setValueAtTime(3.0, now);
 
       gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(0.04, now + 0.003);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
+      gain.gain.linearRampToValueAtTime(0.18, now + 0.003);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.026);
 
       osc.connect(filter);
       filter.connect(gain);
-      gain.connect(ctx.destination);
+      gain.connect(dest);
       osc.start(now);
-      osc.stop(now + 0.025);
+      osc.stop(now + 0.03);
+    } else if (type === 'milestone') {
+      // Dual-harmonic bell chime for benchmark years (1985, 2000, 2025)
+      const osc1 = ctx.createOscillator();
+      const osc2 = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc1.type = 'sine';
+      osc2.type = 'sine';
+      osc1.frequency.setValueAtTime(659.25, now);  // E5
+      osc2.frequency.setValueAtTime(1318.5, now);  // E6
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.24, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+
+      osc1.connect(gain);
+      osc2.connect(gain);
+      gain.connect(dest);
+
+      osc1.start(now); osc1.stop(now + 0.34);
+      osc2.start(now); osc2.stop(now + 0.34);
     } else if (type === 'select') {
       // Double celestial bell chime (D5 587.33 Hz -> A5 880 Hz)
       const notes = [587.33, 880.0];

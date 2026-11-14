@@ -18,6 +18,7 @@ import { UI } from './ui.js';
 import { SignalAudio } from './signal-audio.js';
 import { AudioVisualizer } from './visualizer.js';
 import { GuidedTour } from './tour.js';
+import { setEarconContext } from './earcons.js';
 
 const yieldToBrowser = () => new Promise((resolve) => requestAnimationFrame(() => window.setTimeout(resolve, 0)));
 
@@ -80,8 +81,18 @@ class App {
       onSelect: (region) => this.onSelect(region),
       onBack: () => this.onBack(),
       onSkip: () => this.onSkip(),
-      onSignalToggle: (key, on) => this.audio.setEnabled(key, on),
-      onYearChange: (year) => this.audio.setYear(year),
+      onSignalToggle: (key, on) => {
+        this.audio.setEnabled(key, on);
+        if (this.mode === MODE.ATLAS && this.audio.ready && !this.audio.isPlaying) {
+          this.audio.fadeIn(0.4);
+        }
+      },
+      onYearChange: (year) => {
+        this.audio.setYear(year);
+        if (this.mode === MODE.ATLAS && this.audio.ready && !this.audio.isPlaying) {
+          this.audio.fadeIn(0.4);
+        }
+      },
       onPlay: (year) => this.audio.setYear(year),
       onMuteChange: (muted) => this.audio.setMuted(muted),
       onVolumeChange: (volume) => this.audio.setVolume(volume),
@@ -386,6 +397,7 @@ class App {
   prepareAudio() {
     const token = this.selectionToken;
     this.audio.start().then(() => {
+      if (this.audio.ctx) setEarconContext(this.audio.ctx, this.audio.userGain);
       if (token !== this.selectionToken && !this.pendingSelection && this.mode !== MODE.ATLAS) this.audio.suspend();
     }).catch((error) => console.warn('Audio unavailable', error));
   }
@@ -426,6 +438,7 @@ class App {
       this.audio.setDestination(region);
       this.audio.setYear(this.ui.activeYear);
       this.audio.setEnabledSet(this.ui.enabledSignals);
+      if (this.audio.ready) this.audio.fadeIn(0.8);
       this.ui.showHint(`${region.name} \u00b7 adjust the sound layers`, 4.5);
     } catch (error) {
       console.warn('Destination imagery unavailable', error);
