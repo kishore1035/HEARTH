@@ -46,10 +46,17 @@ export class AssetLoader {
   }
 
   async loadAtlas(regionId = 'coxs_bazar') {
-    const files = [ATLAS.levels.asia.map];
+    const isBayOfBengal = regionId === 'coxs_bazar' || regionId === 'sundarbans';
+    const files = [];
+    if (isBayOfBengal) {
+      files.push(ATLAS.levels.asia.map);
+    }
     const plate = REGION_IMAGERY[regionId]?.file;
-    if (plate) files.push(plate);
-    else if (regionId === 'coxs_bazar') files.push(ATLAS.levels.coxs.map);
+    if (plate) {
+      files.push(plate);
+    } else if (regionId === 'coxs_bazar') {
+      files.push(ATLAS.levels.coxs.map);
+    }
     await Promise.all(files.map((file) => this.loadTexture(file)));
     return this.textures;
   }

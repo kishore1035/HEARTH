@@ -8,6 +8,9 @@ const GROUP_ICONS = {
   'Major Incidents & Tsunamis': '⚡',
   'Megafires & Wildfires': '🔥',
   'Wonders of the World': '🏛️',
+  'Huge Beaches & Coastal Sands': '🏖️',
+  'Great Rainforests of Earth': '🌴',
+  'Catastrophic Landslides': '⛰️',
   'Critical Biosphere Frontlines': '🌍'
 };
 

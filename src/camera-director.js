@@ -129,6 +129,7 @@ export class CameraDirector {
   // Retargets the flight without rebuilding the timeline. `main.js` updates the
   // Earth's region direction first, then calls this before `beginFlight`.
   setRegion(config) {
+    this.currentRegion = config;
     const dir = latLonToVector3(config.lat, config.lon, 1);
     this.regionAz = Math.atan2(dir.x, dir.z);
     this.regionEl = Math.asin(clamp(dir.y, -1, 1));
@@ -237,11 +238,13 @@ export class CameraDirector {
     tl.call(() => this.setState(state), null, time);
   }
 
-  buildRegionSequence(tl, time) {
+  buildRegionSequence(tl, time, targetRegion = this.currentRegion) {
     const rig = this.rig;
     this.refreshRegionTilt();
     const approach = T.regionApproach;
     const cloud = T.cloudEntry;
+    const region = targetRegion || this.currentRegion;
+    const isBayOfBengal = Boolean(region && (region.id === 'coxs_bazar' || region.id === 'sundarbans'));
 
     this.scheduleState(tl, STATES.REGION_APPROACH, time);
     tl.call(() => { this.regionTrack = true; }, null, time);
@@ -269,48 +272,78 @@ export class CameraDirector {
     const asia = ATLAS.levels.asia;
     const coxs = ATLAS.levels.coxs;
 
-    // The 3D cloud pass is still dense here: the globe hands over to the flat
-    // Asia map underneath it, so the swap is never seen.
-    this.scheduleState(tl, STATES.CONTINENT, t);
-    tl.call(() => { this.regionTrack = false; }, null, t);
-    tl.set(this.atlasA, { u: asia.start.u, v: asia.start.v, zoom: asia.start.zoom }, t);
-    tl.set(this.atlasB, { opacity: 0 }, t);
-    // Cut to the atlas under the cloud cover. A crossfade would let the
-    // globe's atmosphere limb show through the half-opaque map as a bright
-    // diagonal seam; the cloud pass is still dense enough to hide the cut.
-    tl.set(this.atlasA, { opacity: 1 }, t);
-    tl.to(this.atlasA, { zoom: asia.start.zoom * 1.15, duration: T.continent, ease: 'sine.inOut' }, t);
-    tl.to(this, { veil: 0, duration: T.continent * 0.78, ease: 'power2.out' }, t);
-    tl.to(this, { cloudPass: 0, duration: T.continent * 0.85, ease: 'power2.out' }, t + T.continent * 0.08);
-    tl.to(this, { cloudOpacity: CLOUDS.opacity.regionReveal, duration: T.continent * 0.7, ease: 'power1.out' }, t);
+    if (isBayOfBengal) {
+      // The 3D cloud pass is still dense here: the globe hands over to the flat
+      // Asia map underneath it, so the swap is never seen.
+      this.scheduleState(tl, STATES.CONTINENT, t);
+      tl.call(() => { this.regionTrack = false; }, null, t);
+      tl.set(this.atlasA, { u: asia.start.u, v: asia.start.v, zoom: asia.start.zoom }, t);
+      tl.set(this.atlasB, { opacity: 0 }, t);
+      tl.set(this.atlasA, { opacity: 1 }, t);
+      tl.to(this.atlasA, { zoom: asia.start.zoom * 1.15, duration: T.continent, ease: 'sine.inOut' }, t);
+      tl.to(this, { veil: 0, duration: T.continent * 0.78, ease: 'power2.out' }, t);
+      tl.to(this, { cloudPass: 0, duration: T.continent * 0.85, ease: 'power2.out' }, t + T.continent * 0.08);
+      tl.to(this, { cloudOpacity: CLOUDS.opacity.regionReveal, duration: T.continent * 0.7, ease: 'power1.out' }, t);
 
-    t += T.continent;
-    this.scheduleState(tl, STATES.COUNTRY, t);
-    tl.to(this.atlasA, { u: asia.end.u, v: asia.end.v, duration: T.country, ease: 'power3.out' }, t);
-    tl.to(this.atlasA, { zoom: asia.end.zoom, duration: T.country, ease: 'power2.inOut' }, t);
+      t += T.continent;
+      this.scheduleState(tl, STATES.COUNTRY, t);
+      tl.to(this.atlasA, { u: asia.end.u, v: asia.end.v, duration: T.country, ease: 'power3.out' }, t);
+      tl.to(this.atlasA, { zoom: asia.end.zoom, duration: T.country, ease: 'power2.inOut' }, t);
 
-    // Bangladesh dissolves into the beach: the incoming plate fades up while the
-    // outgoing one keeps diving, so the jump in scale reads as a fall, not a cut.
-    t += T.country;
-    tl.set(this.atlasB, { u: coxs.start.u, v: coxs.start.v, zoom: coxs.start.zoom }, t);
-    tl.to(this.atlasB, { opacity: 1, duration: T.dissolve, ease: 'power2.inOut' }, t);
-    tl.to(this.atlasA, { opacity: 0, duration: T.dissolve * 0.8, ease: 'power2.in' }, t + T.dissolve * 0.2);
-    tl.to(this.atlasA, { zoom: asia.end.zoom * 1.4, duration: T.dissolve, ease: 'power2.in' }, t);
-    tl.to(this, { veil: 0.34, duration: T.dissolve * 0.45, ease: 'power2.in' }, t);
-    tl.to(this, { veil: 0, duration: T.dissolve * 0.8, ease: 'power2.out' }, t + T.dissolve * 0.45);
+      t += T.country;
+      tl.set(this.atlasB, { u: coxs.start.u, v: coxs.start.v, zoom: coxs.start.zoom }, t);
+      tl.to(this.atlasB, { opacity: 1, duration: T.dissolve, ease: 'power2.inOut' }, t);
+      tl.to(this.atlasA, { opacity: 0, duration: T.dissolve * 0.8, ease: 'power2.in' }, t + T.dissolve * 0.2);
+      tl.to(this.atlasA, { zoom: asia.end.zoom * 1.4, duration: T.dissolve, ease: 'power2.in' }, t);
+      tl.to(this, { veil: 0.34, duration: T.dissolve * 0.45, ease: 'power2.in' }, t);
+      tl.to(this, { veil: 0, duration: T.dissolve * 0.8, ease: 'power2.out' }, t + T.dissolve * 0.45);
 
-    t += T.dissolve;
-    this.scheduleState(tl, STATES.LOCALITY, t);
-    tl.to(
-      this.atlasB,
-      { u: coxs.end.u, v: coxs.end.v, zoom: coxs.end.zoom, duration: T.locality, ease: 'power2.out' },
-      t
-    );
+      t += T.dissolve;
+      this.scheduleState(tl, STATES.LOCALITY, t);
+      tl.to(
+        this.atlasB,
+        { u: coxs.end.u, v: coxs.end.v, zoom: coxs.end.zoom, duration: T.locality, ease: 'power2.out' },
+        t
+      );
 
-    return t + T.locality;
+      return t + T.locality;
+    } else {
+      // Global destinations (Chernobyl, Pyramids, Amazon, Grand Canyon, etc.):
+      // DO NOT display Asia continent plate. Camera clears directly onto the
+      // destination's authentic satellite plate (atlasB).
+      this.scheduleState(tl, STATES.CONTINENT, t);
+      tl.call(() => { this.regionTrack = false; }, null, t);
+      tl.set(this.atlasA, { opacity: 0 }, t);
+      tl.set(this.atlasB, { u: 0.5, v: 0.5, zoom: 1.05, opacity: 1 }, t);
+      tl.to(this.atlasB, { zoom: 1.25, duration: T.continent, ease: 'sine.inOut' }, t);
+      tl.to(this, { veil: 0, duration: T.continent * 0.78, ease: 'power2.out' }, t);
+      tl.to(this, { cloudPass: 0, duration: T.continent * 0.85, ease: 'power2.out' }, t + T.continent * 0.08);
+      tl.to(this, { cloudOpacity: CLOUDS.opacity.regionReveal, duration: T.continent * 0.7, ease: 'power1.out' }, t);
+
+      t += T.continent;
+      this.scheduleState(tl, STATES.COUNTRY, t);
+      tl.to(this.atlasB, { zoom: 1.45, duration: T.country, ease: 'power2.inOut' }, t);
+      tl.to(this, { veil: 0.15, duration: T.country * 0.45, ease: 'power2.in' }, t);
+      tl.to(this, { veil: 0, duration: T.country * 0.8, ease: 'power2.out' }, t + T.country * 0.45);
+
+      t += T.country;
+      this.scheduleState(tl, STATES.LOCALITY, t);
+      tl.to(
+        this.atlasB,
+        { zoom: 1.60, duration: T.dissolve + T.locality, ease: 'power2.out' },
+        t
+      );
+
+      return t + T.dissolve + T.locality;
+    }
   }
 
-  beginFlight(onComplete) {
+  beginFlight(targetRegion, onComplete) {
+    if (typeof targetRegion === 'function') {
+      onComplete = targetRegion;
+      targetRegion = this.currentRegion;
+    }
+    if (targetRegion) this.setRegion(targetRegion);
     this.killTimeline();
     this.cloudPass = 0;
     this.locked = true;
@@ -354,13 +387,18 @@ export class CameraDirector {
     tl.to(this, { cloudOpacity: CLOUDS.opacity.earthOrbit, duration: T.orbit, ease: 'power1.inOut' }, t);
     tl.to(this, { spinScale: 0.55, duration: T.orbit * 0.5, ease: 'power2.out' }, t + T.orbit * 0.2);
 
-    this.buildRegionSequence(tl, t + T.orbit);
+    this.buildRegionSequence(tl, t + T.orbit, targetRegion);
 
     this.timeline = tl;
     return tl;
   }
 
-  continueToRegion(onComplete) {
+  continueToRegion(targetRegion, onComplete) {
+    if (typeof targetRegion === 'function') {
+      onComplete = targetRegion;
+      targetRegion = this.currentRegion;
+    }
+    if (targetRegion) this.setRegion(targetRegion);
     this.killTimeline();
     this.cloudPass = 0;
     this.locked = true;
@@ -374,16 +412,23 @@ export class CameraDirector {
         if (fn) fn();
       }
     });
-    this.buildRegionSequence(tl, 0);
+    this.buildRegionSequence(tl, 0, targetRegion);
     this.timeline = tl;
     return tl;
   }
 
   // Abandons whatever is playing and cuts straight to the end of the region
-  // sequence: the flat beach map, fully zoomed. The veil flashes once so the
+  // sequence: the flat destination plate, fully zoomed. The veil flashes once so the
   // jump reads as a deliberate cut rather than a glitch, then fades to reveal
   // the destination. `onComplete` fires when the reveal is visible.
-  skipToRegion(onComplete) {
+  skipToRegion(targetRegion, onComplete) {
+    if (typeof targetRegion === 'function') {
+      onComplete = targetRegion;
+      targetRegion = this.currentRegion;
+    }
+    const region = targetRegion || this.currentRegion;
+    const isBayOfBengal = Boolean(region && (region.id === 'coxs_bazar' || region.id === 'sundarbans'));
+
     this.killTimeline();
     this.cloudPass = 0;
     this.locked = false;
@@ -406,12 +451,16 @@ export class CameraDirector {
     this.orbitLineFade = 1;
     this.coronaScale = 0.85;
 
-    // Only the beach plate is up at the end of the sequence; the Asia plate has
-    // already faded out beneath it.
     this.atlasA.opacity = 0;
-    this.atlasB.u = coxs.end.u;
-    this.atlasB.v = coxs.end.v;
-    this.atlasB.zoom = coxs.end.zoom;
+    if (isBayOfBengal) {
+      this.atlasB.u = coxs.end.u;
+      this.atlasB.v = coxs.end.v;
+      this.atlasB.zoom = coxs.end.zoom;
+    } else {
+      this.atlasB.u = 0.5;
+      this.atlasB.v = 0.5;
+      this.atlasB.zoom = 1.6;
+    }
     this.atlasB.opacity = 1;
 
     this.setState(STATES.LOCALITY);
@@ -592,9 +641,16 @@ export class CameraDirector {
         this.atlasA.u = asia.u;
         this.atlasA.v = asia.v;
         this.atlasA.zoom = asia.zoom;
-        this.atlasB.u = coxs.u;
-        this.atlasB.v = coxs.v;
-        this.atlasB.zoom = coxs.zoom;
+        const isBayOfBengal = Boolean(this.currentRegion && (this.currentRegion.id === 'coxs_bazar' || this.currentRegion.id === 'sundarbans'));
+        if (isBayOfBengal) {
+          this.atlasB.u = coxs.u;
+          this.atlasB.v = coxs.v;
+          this.atlasB.zoom = coxs.zoom;
+        } else {
+          this.atlasB.u = 0.5;
+          this.atlasB.v = 0.5;
+          this.atlasB.zoom = 1.05;
+        }
         onComplete();
       }
     });

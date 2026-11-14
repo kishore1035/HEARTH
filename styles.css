@@ -819,9 +819,13 @@ body.pointing { cursor: pointer; }
 }
 .badge-tsunami { color: #38bdf8; background: rgba(56, 189, 248, 0.14); border: 1px solid rgba(56, 189, 248, 0.35); }
 .badge-wildfire { color: #f97316; background: rgba(249, 115, 22, 0.16); border: 1px solid rgba(249, 115, 22, 0.35); }
+.badge-megafire { color: #f97316; background: rgba(249, 115, 22, 0.16); border: 1px solid rgba(249, 115, 22, 0.35); }
 .badge-wonder { color: #fbbf24; background: rgba(251, 191, 36, 0.14); border: 1px solid rgba(251, 191, 36, 0.35); }
 .badge-incident { color: #ec4899; background: rgba(236, 72, 153, 0.16); border: 1px solid rgba(236, 72, 153, 0.35); }
 .badge-biosphere { color: #10b981; background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35); }
+.badge-beach { color: #06b6d4; background: rgba(6, 182, 212, 0.14); border: 1px solid rgba(6, 182, 212, 0.35); }
+.badge-rainforest { color: #10b981; background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35); }
+.badge-landslide { color: #ef4444; background: rgba(239, 68, 68, 0.16); border: 1px solid rgba(239, 68, 68, 0.35); }
 .badge-flood { color: #06b6d4; background: rgba(6, 182, 212, 0.14); border: 1px solid rgba(6, 182, 212, 0.35); }
 
 .region-row:hover,

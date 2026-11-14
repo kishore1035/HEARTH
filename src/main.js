@@ -454,10 +454,10 @@ class App {
       gsap.fromTo(this.director, { punch: 0 }, { punch: 1, duration: 0.5, ease: 'power2.out', yoyo: true, repeat: 1 });
       this.ui.hideSelectionNote();
       this.ui.hidePanel(1.1);
-      this.director.continueToRegion(() => this.onFlightComplete());
+      this.director.continueToRegion(region, () => this.onFlightComplete());
     } else {
       this.ui.showSelectionNote(region);
-      this.director.beginFlight(() => this.onFlightComplete());
+      this.director.beginFlight(region, () => this.onFlightComplete());
       const speed = TIMELINE.speed || 1;
       this.ui.hidePanel(1.6 / speed, { delay: 600 / speed });
     }
@@ -538,7 +538,7 @@ class App {
     this.controls.setEnabled(false);
     document.body.classList.remove('grab', 'pointing');
     this.ui.showHint(`Skipping to ${this.currentRegion.name}`, 2.2);
-    this.director.skipToRegion(() => this.onFlightComplete());
+    this.director.skipToRegion(this.currentRegion, () => this.onFlightComplete());
   }
 
   onUserIntent() {
