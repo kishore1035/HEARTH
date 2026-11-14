@@ -1,6 +1,7 @@
 import { gsap } from '../vendor/gsap/index.js';
 import { REGIONS, COUNTRIES, SIGNALS, YEAR_RANGE, COMPARISON_PAIRS } from './regions.js';
 import { REGION_IMAGERY } from './region-imagery.js';
+import { REGION_ENVIRONMENT_AUDIO } from './signal-audio.js';
 
 const countryById = Object.fromEntries(COUNTRIES.map((country) => [country.id, country]));
 
@@ -719,9 +720,11 @@ export class UI {
       : this.activeRegion.country;
     this.el.signalRegion.textContent = this.activeRegion.name;
     const plate = REGION_IMAGERY[this.activeRegion.id];
+    const audioEnv = REGION_ENVIRONMENT_AUDIO[this.activeRegion.id];
+    const soundscapeInfo = audioEnv ? ` · Soundscape: ${audioEnv.name}.` : '';
     this.el.mapProvenance.textContent = plate
-      ? `Map: ${plate.label}. ${plate.note}${plate.credit ? ` Source: ${plate.credit}.` : ''}`
-      : 'Map: generated survey plate, not satellite imagery or imagery for the selected year.';
+      ? `Map: ${plate.label}. ${plate.note}${plate.credit ? ` Source: ${plate.credit}.` : ''}${soundscapeInfo}`
+      : `Map: generated survey plate.${soundscapeInfo}`;
     this.el.signalUnavailable.hidden = SIGNALS.every((signal) => this.isSignalAvailable(signal.key));
 
     for (const signal of SIGNALS) {
@@ -819,13 +822,18 @@ export class UI {
 
   setAudioState(state) {
     this.audioState = { ...state };
-    const { status, muted, volume } = this.audioState;
+    const { status, muted, volume, soundscape } = this.audioState;
     const labels = {
       idle: 'Audio idle', ready: 'Audio ready', playing: 'Playing',
       paused: 'Audio paused', blocked: 'Audio blocked', unavailable: 'Audio unavailable'
     };
     const text = labels[status] || labels.idle;
     this.el.audioStatus.textContent = `${text}${muted ? ' · muted' : volume === 0 ? ' · volume 0' : ''}`;
+    if (soundscape && status === 'playing') {
+      this.el.audioStatus.title = `Spatial Soundscape: ${soundscape}`;
+    } else {
+      this.el.audioStatus.title = '';
+    }
     this.el.audioControls.dataset.status = status;
     this.el.audioMute.setAttribute('aria-pressed', String(Boolean(muted)));
     this.el.audioMute.textContent = muted ? 'Muted' : 'Mute';

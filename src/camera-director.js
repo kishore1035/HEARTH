@@ -314,15 +314,15 @@ export class CameraDirector {
       this.scheduleState(tl, STATES.CONTINENT, t);
       tl.call(() => { this.regionTrack = false; }, null, t);
       tl.set(this.atlasA, { opacity: 0 }, t);
-      tl.set(this.atlasB, { u: 0.5, v: 0.5, zoom: 1.05, opacity: 1 }, t);
-      tl.to(this.atlasB, { zoom: 1.25, duration: T.continent, ease: 'sine.inOut' }, t);
+      tl.set(this.atlasB, { u: 0.5, v: 0.5, zoom: 1.02, opacity: 1 }, t);
+      tl.to(this.atlasB, { zoom: 1.08, duration: T.continent, ease: 'sine.inOut' }, t);
       tl.to(this, { veil: 0, duration: T.continent * 0.78, ease: 'power2.out' }, t);
       tl.to(this, { cloudPass: 0, duration: T.continent * 0.85, ease: 'power2.out' }, t + T.continent * 0.08);
       tl.to(this, { cloudOpacity: CLOUDS.opacity.regionReveal, duration: T.continent * 0.7, ease: 'power1.out' }, t);
 
       t += T.continent;
       this.scheduleState(tl, STATES.COUNTRY, t);
-      tl.to(this.atlasB, { zoom: 1.45, duration: T.country, ease: 'power2.inOut' }, t);
+      tl.to(this.atlasB, { zoom: 1.15, duration: T.country, ease: 'power2.inOut' }, t);
       tl.to(this, { veil: 0.15, duration: T.country * 0.45, ease: 'power2.in' }, t);
       tl.to(this, { veil: 0, duration: T.country * 0.8, ease: 'power2.out' }, t + T.country * 0.45);
 
@@ -330,7 +330,7 @@ export class CameraDirector {
       this.scheduleState(tl, STATES.LOCALITY, t);
       tl.to(
         this.atlasB,
-        { zoom: 1.35, duration: T.dissolve + T.locality, ease: 'power2.out' },
+        { zoom: 1.12, duration: T.dissolve + T.locality, ease: 'power2.out' },
         t
       );
 
@@ -459,7 +459,7 @@ export class CameraDirector {
     } else {
       this.atlasB.u = 0.5;
       this.atlasB.v = 0.5;
-      this.atlasB.zoom = 1.35;
+      this.atlasB.zoom = 1.12;
     }
     this.atlasB.opacity = 1;
 

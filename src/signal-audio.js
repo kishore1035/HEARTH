@@ -1,19 +1,17 @@
-// Web Audio engine for the six-region Champion dataset.
+// Web Audio engine for HEARTH Planetary Geospatial Sonification Observatory.
+// Spans 28 planetary destinations: authentic spatial environment audio soundscapes
+// paired with lush, harmonic, cinematic climate telemetry layers.
 //
-// Ten signals, ten layers, one destination at a time. Each layer is a small
-// synth voice; continuous layers glide to their targets when the year changes,
-// rhythmic layers schedule themselves from `update()` against the audio clock.
-// Mapping ranges and formulas come from `sonification_mapping_rules` in
-// assets/data/bd_6_regions_1985_2026_champion_jukebox.json.
+// Zero buzzing synth presets: pure harmonic sine/triangle ambient pads,
+// crystalline glass-harp pentatonic arpeggiations, soft water droplets,
+// deep subterranean sub-bass, and real CC0 spatial environmental recordings.
 
 import { SIGNALS } from './regions.js';
 
 const PENTATONIC = [0, 3, 5, 7, 10, 12];
 const clamp01 = (value) => (value < 0 ? 0 : value > 1 ? 1 : value);
 
-// The dataset's [0, 900] rain range describes a monthly record. The panel reads
-// annual totals (2,000-5,300 mm across the six regions), so the audio layer uses
-// an annual range instead of pinning every year to maximum density.
+// Dataset ranges for normalized audio mapping
 const AUDIO_RANGES = {
   rain: [0, 6000]
 };
@@ -25,7 +23,7 @@ function normalise(value, range) {
   return clamp01((Number(value) - min) / (max - min));
 }
 
-function makeNoiseBuffer(ctx, seconds = 2) {
+function makeNoiseBuffer(ctx, seconds = 3) {
   const length = Math.max(1, Math.floor(ctx.sampleRate * seconds));
   const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
   const data = buffer.getChannelData(0);
@@ -33,7 +31,7 @@ function makeNoiseBuffer(ctx, seconds = 2) {
   return buffer;
 }
 
-function makeImpulse(ctx, seconds = 2.8, decay = 2.6) {
+function makeImpulse(ctx, seconds = 3.2, decay = 2.4) {
   const length = Math.max(1, Math.floor(ctx.sampleRate * seconds));
   const impulse = ctx.createBuffer(2, length, ctx.sampleRate);
   for (let channel = 0; channel < 2; channel += 1) {
@@ -45,17 +43,50 @@ function makeImpulse(ctx, seconds = 2.8, decay = 2.6) {
   return impulse;
 }
 
-function makeDistortionCurve(amount) {
-  const size = 1024;
-  const curve = new Float32Array(size);
-  const k = amount * 70;
-  const deg = (Math.PI * 20) / 180;
-  for (let i = 0; i < size; i += 1) {
-    const x = (i * 2) / (size - 1) - 1;
-    curve[i] = ((3 + k) * x * deg) / (Math.PI + k * Math.abs(x));
-  }
-  return curve;
-}
+// Full 28-destination spatial environmental soundscape mapping
+export const REGION_ENVIRONMENT_AUDIO = Object.freeze({
+  // --- Major Incidents & Tsunamis ---
+  tohoku_fukushima: { file: 'rain-loop.ogg', name: 'Pacific Tsunami Ocean Surge & Deluge', volume: 0.65 },
+  banda_aceh: { file: 'ocean-loop.ogg', name: 'Indian Ocean Breakers & Rebuilt Shoreline', volume: 0.7 },
+  chernobyl: { file: 'mountain-wind-loop.ogg', name: 'Pripyat Exclusion Zone Desolate Wind', volume: 0.6 },
+  venice_lagoon: { file: 'ocean-loop.ogg', name: 'Venetian Lagoon Tidal Barrier & Sea Wash', volume: 0.65 },
+
+  // --- Megafires & Wildfires ---
+  california_wildfires: { file: 'wildfire-loop.ogg', name: 'Sierra Forest Blaze & Crackling Embers', volume: 0.75 },
+  australia_black_summer: { file: 'wildfire-loop.ogg', name: 'Black Summer Bushfire Frontline & Ember Gale', volume: 0.75 },
+  amazon_basin: { file: 'rainforest-loop.ogg', name: 'Amazon Basin Canopy Wildlife & Rain', volume: 0.7 },
+
+  // --- Wonders of the World ---
+  pyramids_giza: { file: 'monument-bowl-raw.ogg', name: 'Giza Plateau Sacred Drone & Desert Breeze', volume: 0.6 },
+  taj_mahal: { file: 'monument-bowl-raw.ogg', name: 'Yamuna River & Sacred Singing Bowls', volume: 0.6 },
+  great_barrier_reef: { file: 'ocean-loop.ogg', name: 'Coral Sea Reef Breakers & Ocean Swell', volume: 0.7 },
+  mount_everest: { file: 'mountain-wind-loop.ogg', name: 'Himalayan Khumbu Ridge & Alpine Gale', volume: 0.65 },
+  grand_canyon: { file: 'mountain-wind-loop.ogg', name: 'Colorado River Gorge Wind & Echoes', volume: 0.6 },
+  machu_picchu: { file: 'mountain-wind-loop.ogg', name: 'Andean Mountain Peak & Cloud Forest Breeze', volume: 0.6 },
+  victoria_falls: { file: 'rain-loop.ogg', name: 'Mosi-oa-Tunya Cataract Mist & Roar', volume: 0.7 },
+
+  // --- Huge Beaches & Oceanic Coastal Sands ---
+  praia_do_cassino: { file: 'ocean-loop.ogg', name: 'South Atlantic Ocean Breakers & Endless Sand', volume: 0.75 },
+  coxs_bazar: { file: 'ocean-loop.ogg', name: 'Bay of Bengal 120km Surf & Tide', volume: 0.75 },
+  copacabana_beach: { file: 'ocean-loop.ogg', name: 'Copacabana Atlantic Shoreline Waves', volume: 0.7 },
+  whitehaven_beach: { file: 'ocean-loop.ogg', name: 'Whitsunday Coral Sand Shore & Gentle Waves', volume: 0.65 },
+
+  // --- Ancient & Lush Rainforests ---
+  amazon_rainforest: { file: 'rainforest-loop.ogg', name: 'Amazon Primary Rainforest Canopy & Birds', volume: 0.75 },
+  congo_rainforest: { file: 'rainforest-loop.ogg', name: 'Congo Basin Tropical Jungle Canopy', volume: 0.75 },
+  daintree_rainforest: { file: 'forest-birds.ogg', name: 'Daintree Ancient Tropical Rainforest Birds', volume: 0.7 },
+  borneo_rainforest: { file: 'rainforest-loop.ogg', name: 'Borneo Peat Swamp & Rainforest Choir', volume: 0.75 },
+
+  // --- Catastrophic Landslides & Mountain Disasters ---
+  wayanad_landslide: { file: 'rain-loop.ogg', name: 'Western Ghats Monsoon Deluge & Valley Torrent', volume: 0.7 },
+  oso_landslide: { file: 'rain-loop.ogg', name: 'Pacific Northwest River Valley Rain', volume: 0.65 },
+  kedarnath_landslide: { file: 'rain-loop.ogg', name: 'Mandakini Valley Glacial Torrent & Rain', volume: 0.7 },
+  zhouqu_landslide: { file: 'mountain-wind-loop.ogg', name: 'Bailong River Mountain Canyon Wind', volume: 0.65 },
+
+  // --- Critical Biosphere Frontlines ---
+  death_valley: { file: 'mountain-wind-loop.ogg', name: 'Mojave Desert Shimmering Heat & Wind', volume: 0.6 },
+  sundarbans: { file: 'ocean-loop.ogg', name: 'Sundarbans Mangrove Tidal Estuary & Waves', volume: 0.7 }
+});
 
 export class SignalAudio {
   constructor() {
@@ -67,7 +98,6 @@ export class SignalAudio {
     this.enabled = new Set(SIGNALS.map((signal) => signal.key));
     this.norms = {};
     this.rates = { rain: 0.4, lights: 2, disasters: 0.1 };
-    this.airAmount = -1;
     this.nextRain = 0;
     this.nextLights = 0;
     this.nextHit = 0;
@@ -80,6 +110,13 @@ export class SignalAudio {
     this.playRequested = false;
     this.hasPlayed = false;
     this.hasRun = false;
+
+    // Spatial environmental soundscape state
+    this.envAudioCache = new Map();
+    this.currentEnvFile = null;
+    this.currentEnvSource = null;
+    this.currentEnvGain = null;
+    this.activeSoundscapeName = '';
   }
 
   get state() {
@@ -90,7 +127,12 @@ export class SignalAudio {
     else if (this.ctx.state !== 'running') status = this.hasRun ? 'paused' : 'blocked';
     else if (this.playRequested && this.region) status = 'playing';
     else status = this.hasPlayed && this.region ? 'paused' : 'ready';
-    return { status, muted: this.muted, volume: this.volume };
+    return {
+      status,
+      muted: this.muted,
+      volume: this.volume,
+      soundscape: this.activeSoundscapeName
+    };
   }
 
   emitState() {
@@ -153,16 +195,16 @@ export class SignalAudio {
     });
 
     const compressor = ctx.createDynamicsCompressor();
-    compressor.threshold.value = -20;
-    compressor.knee.value = 18;
-    compressor.ratio.value = 5;
-    compressor.attack.value = 0.006;
-    compressor.release.value = 0.3;
+    compressor.threshold.value = -24;
+    compressor.knee.value = 24;
+    compressor.ratio.value = 4;
+    compressor.attack.value = 0.01;
+    compressor.release.value = 0.25;
 
     const master = ctx.createGain();
     master.gain.value = 0.0001;
     master.connect(compressor);
-    // Flight fades affect master only; user mute/volume is the final output gate.
+
     const userGain = ctx.createGain();
     userGain.gain.value = this.muted ? 0 : this.volume;
     compressor.connect(userGain);
@@ -170,28 +212,35 @@ export class SignalAudio {
     this.userGain = userGain;
     this.master = master;
 
-    // Shared reverb: canopy sets the wet mix. The impulse itself is fixed so
-    // moving the year never rebuilds a multi-second buffer on the main thread.
+    // Shared lush convolution reverb
     const convolver = ctx.createConvolver();
     convolver.buffer = makeImpulse(ctx);
     const reverbWet = ctx.createGain();
-    reverbWet.gain.value = 0.02;
+    reverbWet.gain.value = 0.05;
     convolver.connect(reverbWet);
     reverbWet.connect(master);
     const reverbSend = ctx.createGain();
-    reverbSend.gain.value = 1;
+    reverbSend.gain.value = 0.65;
     reverbSend.connect(convolver);
     this.reverb = convolver;
     this.reverbWet = reverbWet;
     this.reverbSend = reverbSend;
 
+    // Dedicated bus for spatial environmental ambient recordings
+    const envBus = ctx.createGain();
+    envBus.gain.value = 0.85;
+    envBus.connect(master);
+    envBus.connect(reverbSend);
+    this.envBus = envBus;
+
     this.noiseBuffer = makeNoiseBuffer(ctx);
 
-    // Vegetation: a warm pad through a low-pass. NDVI opens the filter.
+    // Vegetation: Warm, lush cinematic ambient pad (pure harmonic sines + triangle)
+    // NO harsh sawtooth oscillators
     const padFilter = ctx.createBiquadFilter();
     padFilter.type = 'lowpass';
-    padFilter.frequency.value = 800;
-    padFilter.Q.value = 0.6;
+    padFilter.frequency.value = 520;
+    padFilter.Q.value = 0.5;
     const padGain = ctx.createGain();
     padGain.gain.value = 0;
     padFilter.connect(padGain);
@@ -212,19 +261,21 @@ export class SignalAudio {
       return osc;
     };
     this.padVoices = [
-      padVoice('sawtooth', 110, 0.03),
-      padVoice('triangle', 164.81, 0.025),
-      padVoice('sine', 220, 0.03)
+      padVoice('sine', 110, 0.045),         // Warm A2 fundamental
+      padVoice('triangle', 164.81, 0.022),   // Soft E3 perfect fifth
+      padVoice('sine', 220, 0.038),          // Velvet A3 octave
+      padVoice('sine', 329.63, 0.014)        // Ethereal E4 celestial sheen
     ];
 
-    // Temperature: a single lead line. Pitch is 220 * 4^((T - 10) / 30).
+    // Temperature: Gentle celestial sine lead with slow chorused drift
+    // NO harsh triangle buzzer with fast vibrato
     const lead = ctx.createOscillator();
-    lead.type = 'triangle';
+    lead.type = 'sine';
     lead.frequency.value = 220;
     const leadFilter = ctx.createBiquadFilter();
     leadFilter.type = 'lowpass';
-    leadFilter.frequency.value = 2400;
-    leadFilter.Q.value = 0.4;
+    leadFilter.frequency.value = 850;
+    leadFilter.Q.value = 0.5;
     const leadGain = ctx.createGain();
     leadGain.gain.value = 0;
     lead.connect(leadFilter);
@@ -235,20 +286,21 @@ export class SignalAudio {
     this.lead = lead;
     this.leadGain = leadGain;
 
+    // Slow, serene chorusing drift (0.65 Hz)
     const vibrato = ctx.createOscillator();
     vibrato.type = 'sine';
-    vibrato.frequency.value = 4.6;
+    vibrato.frequency.value = 0.65;
     const vibratoDepth = ctx.createGain();
-    vibratoDepth.gain.value = 4;
+    vibratoDepth.gain.value = 2.5;
     vibrato.connect(vibratoDepth);
     vibratoDepth.connect(lead.detune);
     vibrato.start();
     this.vibrato = vibrato;
 
-    // Groundwater: sub-bass drone, 55-110 Hz, gain follows the anomaly.
+    // Groundwater: Sub-bass warmth (55-82 Hz)
     const sub = ctx.createOscillator();
     sub.type = 'sine';
-    sub.frequency.value = 72;
+    sub.frequency.value = 55;
     const subGain = ctx.createGain();
     subGain.gain.value = 0;
     sub.connect(subGain);
@@ -257,14 +309,14 @@ export class SignalAudio {
     this.sub = sub;
     this.subGain = subGain;
 
-    // Sea level: filtered noise with a slow wave-wash sweep.
+    // Sea level: Gentle wave wash with soft lowpass
     const sea = ctx.createBufferSource();
     sea.buffer = this.noiseBuffer;
     sea.loop = true;
     const seaFilter = ctx.createBiquadFilter();
-    seaFilter.type = 'highpass';
-    seaFilter.frequency.value = 400;
-    seaFilter.Q.value = 0.5;
+    seaFilter.type = 'bandpass';
+    seaFilter.frequency.value = 350;
+    seaFilter.Q.value = 0.8;
     const seaGain = ctx.createGain();
     seaGain.gain.value = 0;
     sea.connect(seaFilter);
@@ -277,39 +329,33 @@ export class SignalAudio {
 
     const seaLfo = ctx.createOscillator();
     seaLfo.type = 'sine';
-    seaLfo.frequency.value = 0.13;
+    seaLfo.frequency.value = 0.12;
     const seaLfoDepth = ctx.createGain();
-    seaLfoDepth.gain.value = 160;
+    seaLfoDepth.gain.value = 120;
     seaLfo.connect(seaLfoDepth);
     seaLfoDepth.connect(seaFilter.frequency);
     seaLfo.start();
     this.seaLfo = seaLfo;
 
-    // Air quality: band-limited noise through a waveshaper. Clean to gritty.
+    // Air quality: Silky breath of wind (NO clipping distortion waveshaper)
     const air = ctx.createBufferSource();
     air.buffer = this.noiseBuffer;
     air.loop = true;
     const airFilter = ctx.createBiquadFilter();
     airFilter.type = 'bandpass';
-    airFilter.frequency.value = 1700;
-    airFilter.Q.value = 0.8;
-    const airShaper = ctx.createWaveShaper();
-    airShaper.curve = makeDistortionCurve(0);
-    airShaper.oversample = '2x';
+    airFilter.frequency.value = 1100;
+    airFilter.Q.value = 0.7;
     const airGain = ctx.createGain();
     airGain.gain.value = 0;
     air.connect(airFilter);
-    airFilter.connect(airShaper);
-    airShaper.connect(airGain);
+    airFilter.connect(airGain);
     airGain.connect(master);
     airGain.connect(reverbSend);
     air.start();
     this.airFilter = airFilter;
-    this.airShaper = airShaper;
     this.airGain = airGain;
 
-    // Rhythmic layers use their own bus so a toggle can silence them cleanly
-    // while already-scheduled notes finish their envelopes.
+    // Rhythmic buses
     this.rainBus = ctx.createGain();
     this.rainBus.gain.value = 0;
     this.rainBus.connect(master);
@@ -334,6 +380,91 @@ export class SignalAudio {
     return ctx;
   }
 
+  async fetchAndDecodeAudio(filename) {
+    if (this.envAudioCache.has(filename)) {
+      return this.envAudioCache.get(filename);
+    }
+    const response = await fetch(`./assets/audio/${filename}`);
+    if (!response.ok) throw new Error(`Audio load failed: ${response.status} ${filename}`);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await this.ctx.decodeAudioData(arrayBuffer);
+    this.envAudioCache.set(filename, audioBuffer);
+    return audioBuffer;
+  }
+
+  async playEnvironmentForRegion(region) {
+    if (!region || !this.ready || this.ctx.state === 'closed') return;
+    const meta = REGION_ENVIRONMENT_AUDIO[region.id] || {
+      file: 'mountain-wind-loop.ogg',
+      name: 'Planetary Surface Ambient Atmosphere',
+      volume: 0.6
+    };
+
+    this.activeSoundscapeName = meta.name;
+    this.emitState();
+
+    if (this.currentEnvFile === meta.file && this.currentEnvSource) {
+      // Already running the correct soundscape
+      return;
+    }
+
+    const now = this.now;
+
+    // Crossfade out previous track
+    if (this.currentEnvGain && this.currentEnvSource) {
+      const oldGain = this.currentEnvGain;
+      const oldSource = this.currentEnvSource;
+      oldGain.gain.cancelScheduledValues(now);
+      oldGain.gain.setValueAtTime(oldGain.gain.value, now);
+      oldGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+      setTimeout(() => {
+        try { oldSource.stop(); } catch {}
+      }, 900);
+      this.currentEnvSource = null;
+      this.currentEnvGain = null;
+    }
+
+    try {
+      const buffer = await this.fetchAndDecodeAudio(meta.file);
+      if (!this.ready || this.ctx.state === 'closed') return;
+
+      const source = this.ctx.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(meta.volume, now + 1.2);
+
+      source.connect(gain);
+      gain.connect(this.envBus);
+      source.start(now);
+
+      this.currentEnvSource = source;
+      this.currentEnvGain = gain;
+      this.currentEnvFile = meta.file;
+    } catch (err) {
+      console.warn('Could not start spatial environment soundscape:', err);
+    }
+  }
+
+  stopEnvironment() {
+    if (this.currentEnvGain && this.currentEnvSource) {
+      const now = this.now;
+      const oldGain = this.currentEnvGain;
+      const oldSource = this.currentEnvSource;
+      oldGain.gain.cancelScheduledValues(now);
+      oldGain.gain.setValueAtTime(oldGain.gain.value, now);
+      oldGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+      setTimeout(() => {
+        try { oldSource.stop(); } catch {}
+      }, 700);
+      this.currentEnvSource = null;
+      this.currentEnvGain = null;
+      this.currentEnvFile = null;
+    }
+  }
+
   async start() {
     if (!this.initPromise) {
       this.initPromise = this.init().catch((error) => {
@@ -352,7 +483,12 @@ export class SignalAudio {
 
   setDestination(region) {
     this.region = region || null;
-    if (!region) this.playRequested = false;
+    if (!region) {
+      this.playRequested = false;
+      this.stopEnvironment();
+    } else {
+      this.playEnvironmentForRegion(region);
+    }
     this.setYear(this.year);
     this.emitState();
   }
@@ -398,51 +534,52 @@ export class SignalAudio {
     if (!this.ready) return;
     const n = this.norms;
     const on = (key) => this.enabled.has(key) && n[key] !== null && n[key] !== undefined;
-    const glide = 0.35;
+    const glide = 0.45;
 
+    // Temperature: Gentle celestial sine melody, octave glide
     const temp = on('temperature') ? n.temperature : null;
-    this.lead.frequency.setTargetAtTime(220 * Math.pow(4, temp === null ? 0 : temp), now, glide);
-    this.leadGain.gain.setTargetAtTime(temp === null ? 0 : 0.035, now, glide);
+    this.lead.frequency.setTargetAtTime(164.81 * Math.pow(3, temp === null ? 0 : temp), now, glide);
+    this.leadGain.gain.setTargetAtTime(temp === null ? 0 : 0.038, now, glide);
 
+    // Vegetation: Silk ambient harmonic pad brightness
     const veg = on('vegetation') ? n.vegetation : null;
-    this.padFilter.frequency.setTargetAtTime(300 + (veg === null ? 0 : veg) * 2500, now, glide);
-    this.padGain.gain.setTargetAtTime(veg === null ? 0 : 0.035 + veg * 0.05, now, glide);
+    this.padFilter.frequency.setTargetAtTime(280 + (veg === null ? 0 : veg) * 650, now, glide);
+    this.padGain.gain.setTargetAtTime(veg === null ? 0 : 0.035 + veg * 0.045, now, glide);
 
+    // Groundwater: Sub-bass body
     const ground = on('groundwater') ? n.groundwater : null;
-    this.sub.frequency.setTargetAtTime(55 + (ground === null ? 0 : ground) * 55, now, glide);
-    this.subGain.gain.setTargetAtTime(ground === null ? 0 : 0.02 + ground * 0.055, now, glide);
+    this.sub.frequency.setTargetAtTime(45 + (ground === null ? 0 : ground) * 35, now, glide);
+    this.subGain.gain.setTargetAtTime(ground === null ? 0 : 0.02 + ground * 0.045, now, glide);
 
+    // Sea level: Ocean wave wash
     const sea = on('seaLevel') ? n.seaLevel : null;
-    this.seaFilter.frequency.setTargetAtTime(260 + (sea === null ? 0 : sea) * 1450, now, glide);
-    this.seaGain.gain.setTargetAtTime(sea === null ? 0 : 0.008 + sea * 0.045, now, glide);
+    this.seaFilter.frequency.setTargetAtTime(240 + (sea === null ? 0 : sea) * 450, now, glide);
+    this.seaGain.gain.setTargetAtTime(sea === null ? 0 : 0.008 + sea * 0.035, now, glide);
 
+    // Air quality: Wind breath
     const air = on('air') ? n.air : null;
-    this.airFilter.frequency.setTargetAtTime(1300 + (air === null ? 0 : air) * 1500, now, glide);
-    this.airGain.gain.setTargetAtTime(air === null ? 0 : 0.004 + air * 0.03, now, glide);
-    if (air !== null && Math.abs(air - this.airAmount) > 0.01) {
-      this.airAmount = air;
-      this.airShaper.curve = makeDistortionCurve(air);
-    }
+    this.airFilter.frequency.setTargetAtTime(900 + (air === null ? 0 : air) * 600, now, glide);
+    this.airGain.gain.setTargetAtTime(air === null ? 0 : 0.004 + air * 0.025, now, glide);
 
+    // Canopy: Reverb depth
     const canopy = on('canopy') ? n.canopy : null;
-    this.reverbWet.gain.setTargetAtTime(canopy === null ? 0.02 : 0.1 + canopy * 0.75, now, 0.5);
+    this.reverbWet.gain.setTargetAtTime(canopy === null ? 0.04 : 0.08 + canopy * 0.55, now, 0.5);
 
+    // Carbon: Subtle celestial micro-detune
     const carbon = on('carbon') ? n.carbon : null;
-    const cents = carbon === null ? 0 : carbon * 35;
+    const cents = carbon === null ? 0 : carbon * 22;
     for (const voice of this.padVoices) voice.detune.setTargetAtTime(cents, now, 0.5);
     this.lead.detune.setTargetAtTime(cents, now, 0.5);
 
-    this.rates.rain = on('rain') ? 0.3 + n.rain * 5.5 : 0;
-    this.rates.lights = on('lights') ? 1.5 + n.lights * 7 : 0;
-    this.rates.disasters = on('disasters') ? 0.06 + n.disasters * 1.15 : 0;
+    this.rates.rain = on('rain') ? 0.3 + n.rain * 4.5 : 0;
+    this.rates.lights = on('lights') ? 1.2 + n.lights * 5 : 0;
+    this.rates.disasters = on('disasters') ? 0.05 + n.disasters * 0.85 : 0;
 
-    this.rainBus.gain.setTargetAtTime(on('rain') ? 0.7 : 0, now, 0.2);
-    this.lightsBus.gain.setTargetAtTime(on('lights') ? 0.5 : 0, now, 0.2);
-    this.hitBus.gain.setTargetAtTime(on('disasters') ? 0.6 : 0, now, 0.2);
+    this.rainBus.gain.setTargetAtTime(on('rain') ? 0.55 : 0, now, 0.2);
+    this.lightsBus.gain.setTargetAtTime(on('lights') ? 0.45 : 0, now, 0.2);
+    this.hitBus.gain.setTargetAtTime(on('disasters') ? 0.5 : 0, now, 0.2);
   }
 
-  // Explicit Play/Pause for the toolbar. Pausing suspends the context so the
-  // status becomes "Audio paused"; Play resumes it and fades the mix back in.
   async togglePlay() {
     const { status } = this.state;
     if (status === 'unavailable') return;
@@ -467,9 +604,10 @@ export class SignalAudio {
       const now = this.now;
       this.master.gain.cancelScheduledValues(now);
       this.master.gain.setValueAtTime(Math.max(0.0001, this.master.gain.value), now);
-      this.master.gain.exponentialRampToValueAtTime(0.8, now + seconds);
+      this.master.gain.exponentialRampToValueAtTime(0.85, now + seconds);
       this.playRequested = true;
       this.hasPlayed = true;
+      this.playEnvironmentForRegion(this.region);
     }
     this.emitState();
   }
@@ -481,6 +619,7 @@ export class SignalAudio {
       this.master.gain.cancelScheduledValues(now);
       this.master.gain.setValueAtTime(Math.max(0.0001, this.master.gain.value), now);
       this.master.gain.exponentialRampToValueAtTime(0.0001, now + seconds);
+      this.stopEnvironment();
     }
     this.emitState();
   }
@@ -503,6 +642,7 @@ export class SignalAudio {
       if (ctx.state !== 'running') throw new Error('Audio is blocked; try again from a user gesture');
       this.hasRun = true;
       this.failureStatus = null;
+      if (this.region) this.playEnvironmentForRegion(this.region);
       this.emitState();
       return ctx;
     } catch (error) {
@@ -518,24 +658,24 @@ export class SignalAudio {
     if (!this.ready) return;
     const now = this.now;
 
-    // Rain: plucked notes. Density is the normalised annual rainfall.
+    // Rain: Gentle water droplet plucks
     if (this.rates.rain > 0) {
       if (this.nextRain < now - 0.4) this.nextRain = now + 0.02;
       let guard = 0;
-      while (this.nextRain < now + 0.12 && guard < 8) {
+      while (this.nextRain < now + 0.12 && guard < 6) {
         this.spawnPluck(this.nextRain);
-        this.nextRain += (0.75 + Math.random() * 0.5) / this.rates.rain;
+        this.nextRain += (0.8 + Math.random() * 0.6) / this.rates.rain;
         guard += 1;
       }
     } else {
       this.nextRain = now + 0.25;
     }
 
-    // Night lights: a pentatonic arpeggiator. Gain and rate follow radiance.
+    // Night lights: Delicate glass celesta / bell chime (pure sine)
     if (this.rates.lights > 0) {
       if (this.nextLights < now - 0.4) this.nextLights = now + 0.02;
       let guard = 0;
-      while (this.nextLights < now + 0.12 && guard < 10) {
+      while (this.nextLights < now + 0.12 && guard < 8) {
         this.spawnArp(this.nextLights);
         this.nextLights += 1 / this.rates.lights;
         guard += 1;
@@ -544,13 +684,13 @@ export class SignalAudio {
       this.nextLights = now + 0.25;
     }
 
-    // Disasters: sparse thunder and tabla-like hits.
+    // Disasters: Deep resonance and atmospheric percussion
     if (this.rates.disasters > 0) {
       if (this.nextHit < now - 0.4) this.nextHit = now + 0.05;
       let guard = 0;
-      while (this.nextHit < now + 0.12 && guard < 3) {
+      while (this.nextHit < now + 0.12 && guard < 2) {
         this.spawnHit(this.nextHit);
-        this.nextHit += (0.6 + Math.random() * 0.8) / this.rates.disasters;
+        this.nextHit += (0.8 + Math.random() * 1.0) / this.rates.disasters;
         guard += 1;
       }
     } else {
@@ -558,40 +698,44 @@ export class SignalAudio {
     }
   }
 
+  // Soft water droplet pluck (pure sine with organic drop envelope)
   spawnPluck(time) {
     const ctx = this.ctx;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     const degree = PENTATONIC[Math.floor(Math.random() * PENTATONIC.length)];
-    const octave = Math.random() < 0.35 ? 2 : 1;
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(220 * octave * Math.pow(2, degree / 12), time);
+    const octave = Math.random() < 0.4 ? 2 : 1;
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(329.63 * octave * Math.pow(2, degree / 12), time);
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.05, time + 0.008);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.3);
+    gain.gain.linearRampToValueAtTime(0.035, time + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.26);
     osc.connect(gain);
     gain.connect(this.rainBus);
     osc.start(time);
-    osc.stop(time + 0.34);
+    osc.stop(time + 0.3);
   }
 
+  // Crystalline glass celesta arpeggio (sine wave chime)
+  // Replaces harsh 8-bit square wave buzzer
   spawnArp(time) {
     const ctx = this.ctx;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     const degree = PENTATONIC[this.lightsStep % PENTATONIC.length];
     this.lightsStep += 1;
-    osc.type = 'square';
-    osc.frequency.setValueAtTime(440 * Math.pow(2, degree / 12), time);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523.25 * Math.pow(2, degree / 12), time);
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.026, time + 0.006);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.14);
+    gain.gain.linearRampToValueAtTime(0.022, time + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.2);
     osc.connect(gain);
     gain.connect(this.lightsBus);
     osc.start(time);
-    osc.stop(time + 0.18);
+    osc.stop(time + 0.22);
   }
 
+  // Soft cinematic sub-thump and wind sweep
   spawnHit(time) {
     const ctx = this.ctx;
     const noise = ctx.createBufferSource();
@@ -599,34 +743,35 @@ export class SignalAudio {
     noise.loop = true;
     const filter = ctx.createBiquadFilter();
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(900 + Math.random() * 900, time);
+    filter.frequency.setValueAtTime(450 + Math.random() * 400, time);
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.06, time + 0.006);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.38);
+    gain.gain.linearRampToValueAtTime(0.045, time + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.4);
     noise.connect(filter);
     filter.connect(gain);
     gain.connect(this.hitBus);
     noise.start(time);
-    noise.stop(time + 0.42);
+    noise.stop(time + 0.45);
 
     const thump = ctx.createOscillator();
     const thumpGain = ctx.createGain();
     thump.type = 'sine';
-    thump.frequency.setValueAtTime(72, time);
-    thump.frequency.exponentialRampToValueAtTime(42, time + 0.28);
+    thump.frequency.setValueAtTime(65, time);
+    thump.frequency.exponentialRampToValueAtTime(38, time + 0.35);
     thumpGain.gain.setValueAtTime(0.0001, time);
-    thumpGain.gain.linearRampToValueAtTime(0.05, time + 0.01);
-    thumpGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.32);
+    thumpGain.gain.linearRampToValueAtTime(0.04, time + 0.01);
+    thumpGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.38);
     thump.connect(thumpGain);
     thumpGain.connect(this.hitBus);
     thump.start(time);
-    thump.stop(time + 0.36);
+    thump.stop(time + 0.42);
   }
 
   async close() {
     if (!this.ctx) return;
     this.fadeOut(0.2);
+    this.stopEnvironment();
     const ctx = this.ctx;
     if (typeof ctx.close === 'function') {
       setTimeout(() => ctx.close().catch(() => {}), 260);
