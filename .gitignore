@@ -1,8 +1,7 @@
 # Dependencies & logs
-
 node_modules/
-
 *.log
+temp_audio_sources/
 
 
 
