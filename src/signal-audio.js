@@ -461,7 +461,10 @@ export class SignalAudio {
     if (this.envAudioCache.has(filename)) {
       return this.envAudioCache.get(filename);
     }
-    const response = await fetch(`./assets/audio/${filename}`);
+    let response = await fetch(`./music/${filename}`).catch(() => null);
+    if (!response || !response.ok) {
+      response = await fetch(`./assets/audio/${filename}`);
+    }
     if (!response.ok) throw new Error(`Audio load failed: ${response.status} ${filename}`);
     const arrayBuffer = await response.arrayBuffer();
     const audioBuffer = await this.ctx.decodeAudioData(arrayBuffer);
