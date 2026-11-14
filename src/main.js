@@ -82,12 +82,18 @@ class App {
       onBack: () => this.onBack(),
       onSkip: () => this.onSkip(),
       onSignalToggle: (key, on) => {
+        if (this.audio.ctx && this.audio.ctx.state === 'suspended') {
+          this.audio.ctx.resume().catch(() => {});
+        }
         this.audio.setEnabled(key, on);
         if (this.mode === MODE.ATLAS && this.audio.ready && !this.audio.isPlaying) {
           this.audio.fadeIn(0.4);
         }
       },
       onYearChange: (year) => {
+        if (this.audio.ctx && this.audio.ctx.state === 'suspended') {
+          this.audio.ctx.resume().catch(() => {});
+        }
         this.audio.setYear(year);
         if (this.mode === MODE.ATLAS && this.audio.ready && !this.audio.isPlaying) {
           this.audio.fadeIn(0.4);

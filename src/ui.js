@@ -183,7 +183,9 @@ export class UI {
       this.el.hapticToggle.checked = this.hapticsEnabled;
     }
     if (this.el.speechRateSelect) {
-      this.el.speechRateSelect.value = String(this.speechRate);
+      const rateStr = this.speechRate.toFixed(1);
+      this.el.speechRateSelect.value = rateStr;
+      if (!this.el.speechRateSelect.value) this.el.speechRateSelect.value = String(this.speechRate);
     }
 
     this.initVoices();
@@ -799,7 +801,10 @@ export class UI {
   setSpeechRate(rate) {
     this.speechRate = Number.isFinite(rate) ? rate : 1.0;
     localStorage.setItem('hearth:speechRate', String(this.speechRate));
-    if (this.el.speechRateSelect) this.el.speechRateSelect.value = String(this.speechRate);
+    if (this.el.speechRateSelect) {
+      this.el.speechRateSelect.value = this.speechRate.toFixed(1);
+      if (!this.el.speechRateSelect.value) this.el.speechRateSelect.value = String(this.speechRate);
+    }
     this.speak(`Voice guide rate set to ${this.speechRate} speed.`);
   }
 
@@ -970,7 +975,10 @@ export class UI {
     const { first, last } = this.regionYearBounds(this.activeRegion);
     const value = Math.max(first, Math.min(last, Number(year)));
     if (value !== this.activeYear) {
-      if (this.earconsEnabled) playEarcon('tick');
+      if (this.earconsEnabled) {
+        if ([1985, 2000, 2025, 2026].includes(value)) playEarcon('milestone');
+        else playEarcon('tick');
+      }
       if (this.hapticsEnabled) {
         if ([1985, 2000, 2025, 2026].includes(value)) triggerHaptic('milestone');
         else triggerHaptic('click');
