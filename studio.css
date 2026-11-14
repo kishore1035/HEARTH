@@ -1,14 +1,14 @@
 :root {
-  --ink: #e8eef7;
-  --ink-soft: #a9bdd6;
-  --ink-dim: #6d829d;
-  --line: rgba(178, 205, 236, 0.22);
-  --line-soft: rgba(178, 205, 236, 0.1);
-  --accent: #cfe2fb;
-  --warm: #ffeed6;
-  --bg: #03050a;
+  --ink: #f0f4f9;
+  --ink-soft: #cbd5e1;
+  --ink-dim: #64748b;
+  --line: rgba(56, 189, 248, 0.22);
+  --line-soft: rgba(255, 255, 255, 0.08);
+  --accent: #38bdf8;
+  --warm: #f59e0b;
+  --bg: #07090e;
   --font: "Inter", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
-  --mono: "SFMono-Regular", "JetBrains Mono", Consolas, "Liberation Mono", Menlo, monospace;
+  --mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   --pad: clamp(18px, 2.4vw, 40px);
 }
 

@@ -4,6 +4,13 @@ import { REGION_IMAGERY } from './region-imagery.js';
 
 const countryById = Object.fromEntries(COUNTRIES.map((country) => [country.id, country]));
 
+const GROUP_ICONS = {
+  'Major Incidents & Tsunamis': '⚡',
+  'Megafires & Wildfires': '🔥',
+  'Wonders of the World': '🏛️',
+  'Critical Biosphere Frontlines': '🌍'
+};
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -161,7 +168,7 @@ export class UI {
 
   matches(region, query) {
     const haystack = normalise(
-      [region.name, region.fullName, region.short, region.category, region.country].join(' ')
+      [region.name, region.fullName, region.short, region.category, region.group, region.country, region.badge].join(' ')
     );
     return haystack.includes(query);
   }
@@ -169,14 +176,34 @@ export class UI {
   createRegionRow(region) {
     const row = document.createElement('button');
     row.type = 'button';
-    row.className = 'region-row';
+    const badgeType = (region.badge || 'telemetry').toLowerCase();
+    row.className = `region-row region-cat-${badgeType}`;
     row.disabled = !this.panelEnabled;
     row.dataset.id = region.id;
     row.setAttribute('role', 'option');
+
+    const latStr = formatCoord(region.lat, 'N', 'S');
+    const lonStr = formatCoord(region.lon, 'E', 'W');
+    const badgeHtml = region.badge
+      ? `<span class="region-badge badge-${badgeType}">${escapeHtml(region.badge)}</span>`
+      : '';
+
     row.innerHTML = [
-      `<span class="region-name">${escapeHtml(region.name)}</span>`,
-      `<span class="region-meta">${escapeHtml(region.short)}</span>`,
-      '<span class="region-chevron" aria-hidden="true">\u203a</span>'
+      '<div class="region-row-main">',
+        '<div class="region-title-line">',
+          `<span class="region-name">${escapeHtml(region.name)}</span>`,
+          badgeHtml,
+        '</div>',
+        '<div class="region-sub-line">',
+          `<span class="region-country-tag">${escapeHtml(region.country)}</span>`,
+          '<span class="region-dot">&middot;</span>',
+          `<span class="region-meta">${escapeHtml(region.short)}</span>`,
+        '</div>',
+        '<div class="region-coord-line">',
+          `<span class="region-coords">${latStr} &middot; ${lonStr}</span>`,
+        '</div>',
+      '</div>',
+      '<span class="region-chevron" aria-hidden="true">&rsaquo;</span>'
     ].join('');
     row.addEventListener('click', () => this.chooseRegion(region));
     row.addEventListener('focus', () => {
@@ -200,8 +227,8 @@ export class UI {
       const empty = document.createElement('div');
       empty.className = 'empty-state';
       empty.innerHTML = [
-        '<p class="empty-title">No places found</p>',
-        '<p class="empty-copy">Try another place or region.</p>',
+        '<p class="empty-title">No destinations found</p>',
+        '<p class="empty-copy">Search by wonder, incident, wildfire, or country.</p>',
         '<button class="empty-clear" type="button">Clear search</button>'
       ].join('');
       empty.querySelector('.empty-clear').addEventListener('click', () => this.clearSearch(true));
@@ -210,12 +237,19 @@ export class UI {
     }
 
     const grouped = new Map();
-    for (const region of matches) {
-      if (!grouped.has(region.country)) grouped.set(region.country, []);
-      grouped.get(region.country).push(region);
+    for (const country of COUNTRIES) {
+      const groupRegions = matches.filter((r) => r.group === country.name || r.category === country.name);
+      if (groupRegions.length) {
+        grouped.set(country.name, groupRegions);
+      }
+    }
+    const coveredIds = new Set([].concat(...[...grouped.values()].map((arr) => arr.map((r) => r.id))));
+    const leftovers = matches.filter((r) => !coveredIds.has(r.id));
+    if (leftovers.length) {
+      grouped.set('Critical Biosphere Frontlines', leftovers);
     }
 
-    for (const [country, regions] of grouped) {
+    for (const [groupName, regions] of grouped) {
       const group = document.createElement('div');
       group.className = 'country-group';
 
@@ -223,22 +257,23 @@ export class UI {
       head.type = 'button';
       head.className = 'group-head';
       head.disabled = !this.panelEnabled;
-      const open = query ? true : this.expanded.has(country);
+      const open = query ? true : this.expanded.has(groupName);
       head.setAttribute('aria-expanded', String(open));
+      const icon = GROUP_ICONS[groupName] ? `${GROUP_ICONS[groupName]} ` : '';
       head.innerHTML = [
         `<span class="group-toggle" aria-hidden="true">${open ? '\u25be' : '\u25b8'}</span>`,
-        `<span class="group-name">${escapeHtml(country)}</span>`,
+        `<span class="group-name">${icon}${escapeHtml(groupName)}</span>`,
         `<span class="group-count">${String(regions.length).padStart(2, '0')}</span>`
       ].join('');
       head.addEventListener('click', () => {
         if (this.query || !this.panelEnabled) return;
-        if (this.expanded.has(country)) this.expanded.delete(country);
-        else this.expanded.add(country);
+        if (this.expanded.has(groupName)) this.expanded.delete(groupName);
+        else this.expanded.add(groupName);
         const hadFocus = document.activeElement === head;
         this.renderPlaces();
         if (hadFocus) {
           const replacement = [...list.querySelectorAll('.group-head')]
-            .find((item) => item.querySelector('.group-name').textContent === country);
+            .find((item) => item.querySelector('.group-name').textContent.includes(groupName));
           replacement?.focus({ preventScroll: true });
         }
       });
@@ -377,9 +412,7 @@ export class UI {
     }
   }
 
-  // In-place destination switcher for the signals view. Options are grouped by
-  // country/EIC series so all eight destinations are reachable without flying
-  // back to the solar system first.
+  // In-place destination switcher for the signals view.
   buildRegionSwitcher() {
     const menu = this.el.regionSwitcherMenu;
     menu.innerHTML = '';
@@ -404,9 +437,14 @@ export class UI {
         option.setAttribute('role', 'option');
         option.setAttribute('aria-selected', 'false');
         option.tabIndex = -1;
+        const badgeType = (region.badge || '').toLowerCase();
+        const badgeHtml = region.badge ? `<span class="switcher-badge badge-${badgeType}">${escapeHtml(region.badge)}</span>` : '';
         option.innerHTML = [
-          `<span class="region-switcher-name">${escapeHtml(region.name)}</span>`,
-          `<span class="region-switcher-option-meta">${escapeHtml(region.short)}</span>`
+          '<div class="region-switcher-title-line">',
+            `<span class="region-switcher-name">${escapeHtml(region.name)}</span>`,
+            badgeHtml,
+          '</div>',
+          `<span class="region-switcher-option-meta">${escapeHtml(region.country)} &middot; ${escapeHtml(region.short)}</span>`
         ].join('');
         option.addEventListener('click', () => this.selectRegionFromSwitcher(region));
         group.appendChild(option);
@@ -415,12 +453,13 @@ export class UI {
       menu.appendChild(group);
     };
 
-    const grouped = new Set();
     for (const country of COUNTRIES) {
-      grouped.add(country.name);
-      appendGroup(country.name, REGIONS.filter((region) => region.country === country.name));
+      const groupRegions = REGIONS.filter((region) => region.group === country.name || region.category === country.name);
+      if (groupRegions.length) {
+        const icon = GROUP_ICONS[country.name] ? `${GROUP_ICONS[country.name]} ` : '';
+        appendGroup(`${icon}${country.name}`, groupRegions);
+      }
     }
-    appendGroup('More destinations', REGIONS.filter((region) => !grouped.has(region.country)));
     this.syncRegionSwitcher();
   }
 
@@ -672,7 +711,9 @@ export class UI {
 
   renderSignals() {
     if (!this.activeRegion) return;
-    this.el.signalCountry.textContent = this.activeRegion.country;
+    this.el.signalCountry.textContent = this.activeRegion.group
+      ? `${this.activeRegion.country} \u00b7 ${this.activeRegion.group}`
+      : this.activeRegion.country;
     this.el.signalRegion.textContent = this.activeRegion.name;
     const plate = REGION_IMAGERY[this.activeRegion.id];
     this.el.mapProvenance.textContent = plate

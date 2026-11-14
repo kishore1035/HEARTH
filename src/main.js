@@ -211,7 +211,7 @@ class App {
     this.earthBody.tiltGroup.rotation.z = EARTH.axisTiltDeg * DEG;
     this.earth.spinAngle = EARTH.startSpinDeg * DEG;
 
-    this.currentRegion = REGION_BY_ID.coxs_bazar;
+    this.currentRegion = REGION_BY_ID.mount_everest || Object.values(REGION_BY_ID)[0];
     this.region = new RegionMarker(this.earth, this.currentRegion);
     this.region.setPixelRatio(pixelRatio);
     this.earth.setRegionLocalDirection(this.region.localDirection);

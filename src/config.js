@@ -121,11 +121,11 @@ export const PLANETS = [
 ];
 
 export const REGION = {
-  name: "Cox's Bazar",
-  label: "Cox's Bazar",
-  sublabel: 'Available region',
-  lat: 21.43,
-  lon: 91.97,
+  name: "Mount Everest",
+  label: "Mount Everest & Khumbu",
+  sublabel: "Himalayan Cryosphere",
+  lat: 27.9881,
+  lon: 86.9250,
   capAngle: 0.215,
   shellScale: 1.0055,
   beamHeight: 0.135,

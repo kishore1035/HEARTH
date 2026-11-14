@@ -48,7 +48,7 @@
 
 <div id="readout" aria-hidden="true">
   <div class="ro-row"><span class="ro-key">view</span><span class="ro-val" id="ro-state">solar system</span></div>
-  <div class="ro-row"><span class="ro-key">target</span><span class="ro-val" id="ro-target">cox's bazar · 21.4°N 91.97°E</span></div>
+  <div class="ro-row"><span class="ro-key">target</span><span class="ro-val" id="ro-target">mount everest · 27.99°N 86.93°E</span></div>
 </div>
 
 <section id="audio-controls" class="audio-controls" aria-label="Audio controls" data-loader-inert inert>
@@ -63,15 +63,15 @@
   <button id="panel-peek" class="panel-peek" type="button" aria-expanded="false" aria-controls="panel-body">
     <span class="peek-handle" aria-hidden="true"></span>
     <span class="peek-row">
-      <span class="peek-label" id="peek-label">places &middot; 06</span>
-      <span class="peek-value" id="peek-value">Cox's Bazar</span>
+      <span class="peek-label" id="peek-label">destinations &middot; 16</span>
+      <span class="peek-value" id="peek-value">Mount Everest</span>
       <span class="peek-chevron" aria-hidden="true">&#8593;</span>
     </span>
   </button>
   <div class="panel-inner" id="panel-body">
 
     <section class="panel-view" id="places-view">
-      <h1 class="panel-title">Where would you<br />like to listen?</h1>
+      <h1 class="panel-title">Earth Observational<br />Telemetry</h1>
 
       <div class="search">
         <svg class="search-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
@@ -91,7 +91,7 @@
             <button id="map-cancel" class="status-button" type="button">Cancel</button>
           </div>
         </div>
-        <p class="place-guidance">Choose a place to fly there and hear its environmental data.</p>
+        <p class="place-guidance">Select a global wonder, cataclysmic incident, or wildfire to sonify its multi-decade climate record.</p>
         <div id="place-list" class="place-list" role="listbox" aria-label="Destinations"></div>
       </div>
       <a class="mobile-lab-link" href="./studio.html" aria-label="Open the Sonification Lab">Sound lab <span aria-hidden="true">&#8599;</span></a>
@@ -105,9 +105,9 @@
 
     <section class="panel-view" id="signals-view" hidden>
       <div class="region-switcher" id="region-switcher">
-        <p class="eyebrow" id="signal-country">Bangladesh</p>
+        <p class="eyebrow" id="signal-country">Nepal &middot; Wonders of the World</p>
         <div class="region-switcher-head">
-          <h1 class="panel-title" id="signal-region">Cox's Bazar</h1>
+          <h1 class="panel-title" id="signal-region">Mount Everest</h1>
           <button id="region-switcher-toggle" class="region-switcher-toggle" type="button"
                   aria-haspopup="listbox" aria-expanded="false" aria-controls="region-switcher-menu"
                   aria-label="Switch destination">
@@ -171,14 +171,14 @@
 
 <div id="selection-note" class="selection-note" aria-live="polite">
   <span class="sn-eyebrow" id="sn-eyebrow">Explore Earth</span>
-  <span class="sn-line">Let's find somewhere to listen.</span>
-  <span class="sn-dest" id="sn-dest">Destination available · Cox's Bazar</span>
+  <span class="sn-line">Select a destination to listen.</span>
+  <span class="sn-dest" id="sn-dest">Destination available · Mount Everest</span>
 </div>
 
 <div id="anchor" class="anchor" aria-hidden="true">
   <span class="anchor-reticle"></span>
   <span class="anchor-copy">
-    <strong>Cox's Bazar</strong>
+    <strong>Mount Everest</strong>
     <em>Available region</em>
   </span>
 </div>
