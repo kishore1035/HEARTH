@@ -70,10 +70,10 @@ export const REGION_IMAGERY = Object.freeze({
     credit: 'NASA Earth Observatory'
   },
   mount_everest: {
-    file: 'everest-hls.jpg',
-    label: 'NASA SVS ID 4834 & GIBS · Mount Everest, Khumbu Glacier & Imja Lake',
-    note: 'Cryosphere and high-altitude glacial moraines.',
-    credit: 'NASA SVS (ID 4834) & NASA GIBS / Landsat'
+    file: 'everest-satellite.jpg',
+    label: 'High-Resolution Satellite · Mount Everest, Khumbu Glacier & Nuptse Ridge',
+    note: 'Glacial cryosphere, moraine streams, and 8,848m alpine rock ridges.',
+    credit: 'High-Resolution Earth Observation Satellite'
   },
   grand_canyon: {
     file: 'grand-canyon-satellite.jpg',
