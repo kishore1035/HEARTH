@@ -3,9 +3,10 @@
 **Translating 42 Years (1985–2026) of NASA Earth Observation Satellite Telemetry & Multi-Spectral Visual Frames into Real-Time Interactive Acoustic Soundscapes**
 
 [![Author](https://img.shields.io/badge/Author-kishore1035-0B3D91?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kishore1035)
+[![NASA Space Apps](https://img.shields.io/badge/NASA_Space_Apps_Challenge-The_Earth_Information_Jukebox-0284C7?style=for-the-badge&logo=nasa&logoColor=white)](https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/)
 [![Runtime](https://img.shields.io/badge/Runtime-Zero_Dependencies_Vanilla_ESM_WebGL2-1E293B?style=for-the-badge)](https://github.com/kishore1035/HEARTH)
-[![Acoustic Engine](https://img.shields.io/badge/Synthesis-10_Voice_Web_Audio_Graph-FF6D00?style=for-the-badge&logo=waveform&logoColor=white)](https://github.com/kishore1035/HEARTH)
-[![Accessibility](https://img.shields.io/badge/Accessibility-WCAG_2.1_Screen_Reader_and_Voice_Guide-7C3AED?style=for-the-badge)](https://github.com/kishore1035/HEARTH)
+[![Acoustic Engine](https://img.shields.io/badge/Synthesis-10_Layer_Web_Audio_Graph-FF6D00?style=for-the-badge&logo=waveform&logoColor=white)](https://github.com/kishore1035/HEARTH)
+[![Accessibility](https://img.shields.io/badge/Accessibility-WCAG_2.2_Screen_Reader_and_Voice_Guide-7C3AED?style=for-the-badge)](https://github.com/kishore1035/HEARTH)
 
 ---
 
@@ -16,98 +17,94 @@ For more than four decades, space agency Earth-observing satellites have tracked
 **HEARTH** is a zero-dependency, browser-native geospatial sonification observatory that unites 3D celestial navigation, computer-vision image telemetry, and multi-timbral synthesis across two interconnected engines:
 
 1. **The 3D Solar-to-Surface Observatory (`index.html`):**  
-   Choreographs an 8-stage cinematic descent from the wide Solar System past an atmosphere-wrapped Earth onto high-resolution satellite locality plates across 8 frontline ecological and climatic regions. Each destination drives a real-time **10-voice Web Audio synthesizer** spanning **1985–2026**, equipped with **5-year and 10-year comparative delta ($\Delta$) auditioning**.
+   Choreographs an 8-stage cinematic descent from the wide Solar System past an atmosphere-wrapped Earth onto high-resolution satellite locality plates across **28 global destinations** (Wonders of the World, Megafires, Tsunamis, Landslides, Rainforests, and Oceanic Beaches). Each destination drives a real-time **10-voice Web Audio synthesizer** spanning **1985–2026**, equipped with **authentic spatial environmental recordings** and **5-year to 40-year comparative delta ($\Delta$) auditioning**.
 2. **The Acoustic Computer-Vision Lab (`studio.html`):**  
-   Performs live pixel-level feature extraction on chronological satellite filmstrip matrices (130-month MODIS series, annual Cryosphere glacial retreat, and VIIRS wildfire smoke plumes). A hardware-clocked scanline analyzes luminance, cloud coverage, vegetation greenness, spatial edge density, and surface water in real time to drive an expressive A-minor pentatonic synthesizer.
+   Performs live pixel-level feature extraction on chronological NASA EIC satellite filmstrip matrices (130-month MODIS series, annual Cryosphere glacial retreat, and VIIRS wildfire smoke plumes). A hardware-clocked scanline analyzes luminance, cloud coverage, vegetation greenness, spatial edge density, and surface water in real time to drive an expressive A-minor pentatonic synthesizer.
 
 ---
 
-## 2. Scientific Telemetry to Acoustic Synthesis Mapping
+## 2. NASA Space Apps Challenge Alignment: "The Earth Information Jukebox"
 
-Every sound generated in HEARTH is derived from physical satellite observations and displayed alongside its verified metric:
+HEARTH was built specifically to address the core problem, objectives, and resource specifications of the **2026 NASA Space Apps Challenge — "The Earth Information Jukebox"**:
 
-### A. 10-Voice Regional Environmental Synthesizer (`src/signal-audio.js`)
+| Challenge Requirement | How HEARTH Satisfies It | Implementation Location |
+| :--- | :--- | :--- |
+| **Pairs EIC visual frames with dynamic sonifications in real time** | The Acoustic Lab performs real-time client-side computer-vision canvas pixel analysis on NASA EIC visual filmstrips (130 monthly frames of Cox's Bazar, 27 annual frames of Everest/Imja Glacier, 27 annual frames of Wildfires) and dynamically maps pixel density, cloud cover, and greenness into audio parameters in real time. | `studio.html`, `src/filmstrip.js`, `src/sonify.js` |
+| **Interactive Jukebox interface** | Full interactive 3D Earth jukebox allowing users to select any of 28 planetary destinations, scrub 42 years of climate history (1985–2026), isolate individual sound layers, and trigger comparative time-lapse playback. | `index.html`, `src/ui.js`, `src/signal-audio.js` |
+| **Musicality over noise (Consonant scales & harmonies)** | Uses an A-minor pentatonic register `[0, 3, 5, 7, 10, 12]` and pure harmonic sine/triangle foundations. Clamped warm lowpass filtering (280–850 Hz) guarantees that sounds remain cinematic, engaging, and pleasant without chaotic noise or harsh buzzing. | `src/signal-audio.js`, `src/sonify.js` |
+| **Accessibility for Blind & Low-Vision Users** | Full WCAG 2.2 compliant accessibility: ARIA roles (`slider`, `option`, `group`, `aria-checked`, `aria-valuetext`), screen reader live regions, frame-by-frame speech announcements, full keyboard navigation (`Space`, `Arrows`, `Esc`), and a built-in **Web Speech API Voice Guide** that speaks climate summaries aloud. | `src/ui.js`, `studio.html` |
+| **Spatial Relevance & Biome Identity** | Includes authentic CC0 spatial audio soundscapes corresponding to every destination: Amazon toucans/canopy choir for rainforests, ocean surf breakers for beaches, crackling timber embers for wildfires, torrential monsoon downpours for landslides, and sacred singing bowls for ancient wonders. | `assets/audio/`, `src/signal-audio.js` |
+
+---
+
+## 3. NASA EIC Resources Implemented in HEARTH
+
+All ten featured datasets and resources from the official NASA challenge resources are directly incorporated into HEARTH:
+
+1. **Change in Night Lights between 2012 and 2023 (EIC Version):** Integrated as Signal 9 (`nightLights`), driving a crystalline glass-harp pentatonic arpeggiator reflecting human electrification and urban expansion.
+2. **Global Sea Surface Currents & Temperature:** Integrated as Signal 1 (`temperature`, MERRA-2 / MODIS SST) and Signal 6 (`seaLevel`, AVISO / Perpetual Ocean), driving wave-wash bandpass filters.
+3. **GEOS Aerosols (Smoke, Dust, Atmospheric Particles):** Integrated as Signal 7 (`air`), driving bandpass wind breath filters, and in the Acoustic Lab's 27-frame Global Wildfire Smoke series.
+4. **Air Quality Model Runs (SVS):** Integrated as Signal 7 (`air`, Aura OMI NO₂ and MODIS AOD).
+5. **Perpetual Ocean 2: Western Boundary Currents:** Integrated as Signal 6 (`seaLevel`), creating undulating tidal sweeps across coastal regions.
+6. **DYAMOND Global Carbon Dioxide:** Integrated as Signal 8 (`carbon`, DYAMOND / OCO-2 CO₂), adding subtle harmonic tension ($0\text{ to }22\text{ cents}$) across the multi-timbral pad.
+7. **Lightning Events Detected from ISS (2017–2023):** Integrated as Signal 10 (`disasters`), driving punctuated percussive hits and deep exponential sub-bass drops.
+8. **3D View of an Atmospheric River from an Earth System Model:** Integrated as Signal 2 (`rain`, GPM IMERG / PRECTOTCORR), driving water droplet pluck density.
+9. **GEDI Forest Height:** Integrated as Signal 4 (`canopy`, NASA ISS GEDI Lidar), modulating physical convolution reverb decay length.
+10. **Data Sonification: Caldwell 73 Framework:** Followed as the architectural guideline for non-linear exponential perceptual mapping.
+
+---
+
+## 4. 28 Planetary Destinations Across All Major Biomes
+
+HEARTH expands beyond local telemetry to encompass 28 global frontlines:
+
+* **Ancient & Lush Rainforests:** Amazon Rainforest Heart (Brazil), Congo Basin Primary Rainforest (DRC), Daintree Ancient Rainforest (Australia), Borneo Tropical Peat Canopy (Indonesia).
+* **Huge Beaches & Ocean Coasts:** Copacabana & Ipanema Shoreline (Brazil), Praia do Cassino (Brazil, longest beach on Earth), Whitehaven Beach & Whitsundays (Australia), Cox’s Bazar (Bangladesh), Venice Lagoon (Italy), Great Barrier Reef (Australia).
+* **Megafires & Wildfires:** Pacific Northwest & California Wildfires (USA), NSW & Southeast Australia Black Summer (Australia), Amazon Basin Deforestation Arc (Brazil).
+* **Catastrophic Landslides & Mountain Disasters:** Wayanad Megalandslide Frontline (India), Oso Landslide Disaster (USA), Kedarnath Glacial Debris Surge (India), Zhouqu Loess Mudslide Disaster (China).
+* **Wonders of the World:** Great Pyramid of Giza (Egypt), Taj Mahal & Yamuna Basin (India), Mount Everest & Khumbu Glacier (Nepal), Grand Canyon & Lake Mead (USA), Machu Picchu & Andean Cloud Forest (Peru), Victoria Falls & Zambezi (Zambia/Zimbabwe).
+* **Critical Biosphere Frontlines:** Tohoku Coast & Fukushima (Japan), Banda Aceh Tsunami Coast (Indonesia), Chernobyl Exclusion Zone (Ukraine), Sundarbans Mangrove Delta (Bangladesh/India), Death Valley Thermal Basin (USA).
+
+---
+
+## 5. Acoustic Synthesis Architecture (`src/signal-audio.js`)
 
 | # | Environmental Layer | Sensor / Model Source | Physical Range & Unit | Real-Time Web Audio Synthesis Behavior |
 | :- | :--- | :--- | :--- | :--- |
-| **1** | **Surface Temperature** (`T2M_C`) | NASA POWER / MERRA-2 | $10.0\text{ to }40.0^\circ\text{C}$ | **Lead Triangle Synth Pitch:** Exponential mapping $f = 220 \times 4^{\frac{T-10}{30}}\text{ Hz}$ ($220\text{--}880\text{ Hz}$) with $4.6\text{ Hz}$ vibrato. |
-| **2** | **Precipitation** (`PRECTOTCORR_mm`) | NASA POWER / GPM IMERG | $0\text{ to }6,000\text{ mm/yr}$ | **Plucked Pentatonic Rain Notes:** Controls trigger density ($0.3\text{--}5.8\text{ notes/sec}$) across an A-minor pentatonic register. |
-| **3** | **Vegetation Greenness** (`NDVI`) | NASA MODIS / VIIRS | $0.10\text{ to }0.90\text{ index}$ | **Harmonic Pad Brightness:** Modulates low-pass filter cutoff ($300\text{--}2,800\text{ Hz}$) across a 3-voice pad (`sawtooth` + `triangle` + `sine`). |
-| **4** | **Canopy Height** (`GEDI_canopy_m`) | NASA ISS GEDI Lidar | $2.0\text{ to }20.0\text{ m}$ | **Convolution Reverb Wet Mix:** Direct send ($0.10\text{--}0.85$). Deep canopies reverberate in lush space; deforestation dries the sound. |
-| **5** | **Groundwater & Ice Mass** (`GRACE_ewh_cm`) | NASA GRACE / GRACE-FO | $-20.0\text{ to }+15.0\text{ cm EWH}$ | **Sub-Bass Foundation Drone:** Drives pure sine sub-bass frequency ($55\text{--}110\text{ Hz}$) and volume level. |
-| **6** | **Sea-Level Anomaly** (`SEA_LEVEL_mm`) | NASA Sea Level Change | $0.0\text{ to }250.0\text{ mm}$ | **Coastal Wave-Wash Sweep:** High-pass filtered noise ($260\text{--}1,710\text{ Hz}$) modulated by a $0.13\text{ Hz}$ tidal LFO (muted for landlocked regions). |
-| **7** | **Air Quality** (`AIR_AOD_NO2_index`) | NASA Aura OMI & MODIS AOD | $10.0\text{ to }100.0\text{ index}$ | **Waveshaper Distortion Grit:** Bandpass noise ($1,300\text{--}2,800\text{ Hz}$) routed through a $2\times$ oversampled non-linear distortion curve. |
-| **8** | **Atmospheric Carbon** (`CO2_ppm`) | NASA OCO-2 / OCO-3 | $340.0\text{ to }435.0\text{ ppm}$ | **Microtonal Detuning Tension:** Adds $0\text{ to }+35\text{ cents}$ detune across voices to express global atmospheric greenhouse tension. |
-| **9** | **Nighttime Lights** (`NIGHT_LIGHTS_nW`) | NASA Black Marble VIIRS | $0.0\text{ to }100.0\text{ nW/cm}^2/\text{sr}$ | **Urban Footprint Arpeggiator:** Square-wave pentatonic arpeggio rate ($1.5\text{--}8.5\text{ steps/sec}$) reflecting human electrification. |
-| **10**| **Disasters & Wildfires** (`EXTREME_EVENTS`) | NASA FIRMS VIIRS | $0\text{ to }30+\text{ events/yr}$ | **Percussion & Sub-Drop Hits:** Filtered noise bursts paired with $72 \to 42\text{ Hz}$ exponential pitch-drop bass drums. |
+| **1** | **Surface Temperature** (`T2M_C`) | NASA POWER / MERRA-2 | $10.0\text{ to }40.0^\circ\text{C}$ | **Celestial Sine Lead:** Octave glide $f = 164.81 \times 3^{\frac{T-10}{30}}\text{ Hz}$ with $0.65\text{ Hz}$ chorused drift. |
+| **2** | **Precipitation** (`PRECTOTCORR_mm`) | NASA POWER / GPM IMERG | $0\text{ to }6,000\text{ mm/yr}$ | **Organic Water Droplet Plucks:** Pure sine droplets ($0.3\text{--}5.5\text{ drops/sec}$) across an A-minor pentatonic register. |
+| **3** | **Vegetation Greenness** (`NDVI`) | NASA MODIS / VIIRS | $0.10\text{ to }0.90\text{ index}$ | **Harmonic Ambient Pad:** 4-voice pure sine/triangle pad (A2, E3, A3, E4) filtered through warm lowpass ($280\text{--}800\text{ Hz}$). |
+| **4** | **Canopy Height** (`GEDI_canopy_m`) | NASA ISS GEDI Lidar | $2.0\text{ to }20.0\text{ m}$ | **Convolution Reverb Wet Mix:** Direct send ($0.08\text{--}0.65$). Deep canopies reverberate in lush space. |
+| **5** | **Groundwater & Ice Mass** (`GRACE_ewh_cm`) | NASA GRACE / GRACE-FO | $-20.0\text{ to }+15.0\text{ cm EWH}$ | **Sub-Bass Foundation Drone:** Pure $45\text{--}80\text{ Hz}$ sine drone providing acoustic depth. |
+| **6** | **Sea-Level Anomaly** (`SEA_LEVEL_mm`) | NASA Sea Level Change | $0.0\text{ to }250.0\text{ mm}$ | **Coastal Wave-Wash Sweep:** Bandpass noise ($240\text{--}690\text{ Hz}$) modulated by a $0.12\text{ Hz}$ tidal LFO. |
+| **7** | **Air Quality** (`AIR_AOD_NO2_index`) | NASA Aura OMI & MODIS AOD | $10.0\text{ to }100.0\text{ index}$ | **Wind Breath Filter:** Bandpass noise ($900\text{--}1,500\text{ Hz}$) creating natural atmospheric respiration. |
+| **8** | **Atmospheric Carbon** (`CO2_ppm`) | NASA OCO-2 / OCO-3 | $340.0\text{ to }435.0\text{ ppm}$ | **Greenhouse Detune:** Adds $0\text{ to }+22\text{ cents}$ detune across voices to express atmospheric greenhouse tension. |
+| **9** | **Nighttime Lights** (`NIGHT_LIGHTS_nW`) | NASA Black Marble VIIRS | $0.0\text{ to }100.0\text{ nW/cm}^2/\text{sr}$ | **Glass Celesta Chimes:** Sine-wave pentatonic arpeggiations ($1.2\text{--}6.2\text{ steps/sec}$) reflecting electrification. |
+| **10**| **Disasters & Wildfires** (`EXTREME_EVENTS`) | NASA FIRMS VIIRS | $0\text{ to }30+\text{ events/yr}$ | **Atmospheric Percussion:** Filtered noise bursts paired with $65 \to 38\text{ Hz}$ exponential sub-thump bass drums. |
+| **11**| **Spatial Environment Loop** | CC0 Field Recordings | Ambient loop | **Continuous Biome Bed:** Crossfading loop (rainforest canopy, ocean breakers, wildfires, monsoon deluges, alpine gales, or sacred bowls). |
 
 ---
 
-### B. Computer-Vision Satellite Pixel Analysis (`src/filmstrip.js` & `src/sonify.js`)
+## 6. Running Locally
 
-In the **Acoustic Lab (`studio.html`)**, each $256\times256$ satellite frame is analyzed using a 2px-grid downsampling kernel (`measureCell`):
-* **Luminance ($L = 0.2126R + 0.7152G + 0.0722B$):** Governs master low-pass filter cutoff ($320\text{--}2,820\text{ Hz}$).
-* **Cloud Coverage ($R > 205 \land G > 205 \land B > 205$):** Controls white/pink atmospheric noise bed volume.
-* **Vegetation ($G - R$):** Shifts harmonic chord voicing: Minor third (somber bare terrain), Major third (temperate vegetation), or Suspended fourth (dense canopy).
-* **Spatial Edge Energy ($|\Delta L_x| + |\Delta L_y|$):** Sets rhythmic plucking pulse frequency ($0.55\text{--}4.45\text{ Hz}$).
-* **Surface Water ($B > G + 8 \land B > R + 14$):** Bolsters the sub-octave $55\text{ Hz}$ foundation.
-* **Missing Swath Suppression:** Detects missing or black telemetry swaths ($L < 5 \lor L > 250$ with contrast $< 0.5$) and silences output to prevent hallucinating data.
-
----
-
-## 3. Project Architecture
-
-```
-HEARTH/
-├── index.html                  # 3D Solar-to-Surface Observatory entry point
-├── studio.html                 # Acoustic Lab filmstrip sonification lab
-├── styles.css                  # Craft-designed scientific observatory styling
-├── studio.css                  # Studio laboratory UI styling
-├── server.mjs                  # Zero-dependency local development server
-├── assets/
-│   ├── data/                   # NASA POWER, MODIS, GRACE, GEDI, OCO-2 telemetry
-│   └── textures/               # High-res Earth surfaces, planet maps, satellite plates
-├── src/
-│   ├── main.js                 # Observatory lifecycle & rendering pipeline
-│   ├── config.js               # Astronomical constants, render thresholds & camera states
-│   ├── camera-director.js      # 8-stage camera choreography & interruption rig
-│   ├── controls.js             # Mouse drag, pinch, and momentum handling
-│   ├── signal-audio.js         # 10-layer Web Audio synthesizer engine
-│   ├── filmstrip.js            # Satellite sprite sheet loading & pixel analysis
-│   ├── sonify.js               # Frame-to-sound synthesis graph & GISTEMP detuning
-│   ├── earth.js                # Rayleigh atmosphere shader & city lights emission
-│   ├── sun.js                  # Simplex 4D noise procedural solar corona
-│   ├── solar-system.js         # Keplerian planetary orbits & ring shaders
-│   ├── atlas.js                # Locality flat map stage & procedural survey plates
-│   ├── ui.js                   # Accessible HUD, search filter, voice guide & mobile sheet
-│   └── utils.js                # Spherical math, easing, and coordinate helpers
-└── vendor/
-    ├── three.module.js         # Vendored Three.js r128+ ESM
-    └── gsap/                   # Vendored GreenSock animation engine
-```
-
----
-
-## 4. Running Locally
-
-HEARTH runs completely natively in any modern web browser without requiring a bundler, package manager, or compile step.
+HEARTH runs natively in any modern web browser without requiring a bundler, build step, or package manager:
 
 ```bash
-# Start the local development server (Node.js 18+)
+# Start local server (Node.js 18+)
 node server.mjs
 
 # Custom port
-PORT=8080 node server.mjs
+PORT=5174 node server.mjs
 ```
 
 Open your browser to:
-- **Observatory:** `http://localhost:5173/`
-- **Acoustic Lab:** `http://localhost:5173/studio.html`
+* **Observatory:** `http://localhost:5174/`
+* **Acoustic Lab:** `http://localhost:5174/studio.html`
 
 ---
 
-## 5. Author & Attribution
+## 7. Author & Attribution
 
-* **Creator / Architect:** **Kishore** ([GitHub @kishore1035](https://github.com/kishore1035))
-* **License:** Released under the [Apache-2.0 / MIT License](LICENSE).
-* **Data & Imagery:** Derived from public domain observations courtesy of the **NASA Earth Information Center (EIC)**, **NASA SVS**, **NASA POWER**, **USGS/NASA Landsat**, and **MODIS/VIIRS**.
+* **Architect & Developer:** **Kishore** ([GitHub @kishore1035](https://github.com/kishore1035))
+* **License:** Released under the [Apache-2.0 License](LICENSE).
+* **Data & Imagery:** Courtesy of the **NASA Earth Information Center (EIC)**, **NASA SVS**, **NASA POWER**, **USGS/NASA Landsat**, **MODIS/VIIRS**, and **NASA ISS Astronaut Photography**.
