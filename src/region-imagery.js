@@ -7,9 +7,9 @@ export const REGION_IMAGERY = Object.freeze({
   // --- Major Incidents & Tsunamis ---
   tohoku_fukushima: {
     file: 'tohoku-fukushima-satellite.jpg',
-    label: 'NASA Earth Observatory · Tohoku Coastal Tsunami Surge & Inundation',
-    note: '2011 megathrust tsunami inundation and Sendai bay surge.',
-    credit: 'NASA Earth Observatory / Landsat'
+    label: 'NASA Astronaut Photography ISS026 · Tohoku Coastline & Tsunami Surge Zone',
+    note: 'Expedition 26 orbital documentation of the Sendai coastal plain and maritime surge channels.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   banda_aceh: {
     file: 'banda-aceh-satellite.jpg',
@@ -24,37 +24,37 @@ export const REGION_IMAGERY = Object.freeze({
     credit: 'NASA Johnson Space Center (ISS-57)'
   },
   venice_lagoon: {
-    file: 'venice-lagoon-satellite.jpg',
-    label: 'NASA ASTER & Landsat · Venice Lagoon Barrier Islands & Sea Surge',
-    note: 'Adriatic tidal barrier system and vulnerable lagoon margins.',
-    credit: 'NASA / USGS / ASTER Science Team'
+    file: 'venice-lagoon-satellite-hires.jpg',
+    label: 'NASA Astronaut Photography ISS046 · Venice Lagoon, Grand Canal & Barrier Islands',
+    note: 'High-definition telephoto view of the historic city of Venice, the Grand Canal, tidal shallows, and the Adriatic Lido barrier.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
 
   // --- Megafires & Wildfires ---
   california_wildfires: {
-    file: 'wildfire-viirs.jpg',
-    label: 'NASA SVS ID 5113 & 5453 · VIIRS Active Fires (FRP) & Smoke Plumes',
-    note: 'Peak wildfire season fire radiative power and atmospheric smoke.',
-    credit: 'NASA SVS EIC Gallery & NASA FIRMS VIIRS'
+    file: 'california-wildfire-satellite.jpg',
+    label: 'NASA Astronaut Photography ISS056 · California Megafires & Pyrocumulus Clouds',
+    note: 'Massive convective pyrocumulus smoke columns rising from Sierra Nevada forest fires and drifting over the Central Valley.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   australia_black_summer: {
-    file: 'daintree-rainforest-satellite.jpg',
-    label: 'NASA Terra MODIS · Southeast Australia Bushfire Frontline',
-    note: 'Catastrophic 2019-2020 Black Summer smoke canopy.',
-    credit: 'NASA GSFC MODIS Rapid Response'
+    file: 'australia-bushfire-satellite.jpg',
+    label: 'NASA Astronaut Photography ISS037 · New South Wales Coastline & Bushfire Frontline',
+    note: 'Catastrophic bushfire smoke plumes blowing eastward off the Great Dividing Range into the Tasman Sea.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   amazon_basin: {
-    file: 'amazon-rainforest-satellite.jpg',
-    label: 'NASA Earth Observatory · Amazon River Delta & Primary Rainforest',
-    note: 'Deforestation arc and tropical river system.',
-    credit: 'NASA Earth Observatory / MODIS'
+    file: 'amazon-deforestation-satellite.jpg',
+    label: 'NASA Astronaut Photography ISS026 · Amazon Basin Deforestation Arc & Frontier',
+    note: 'Geometric fishbone deforestation patterns and cleared timber swaths cutting through the southern Amazon canopy.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
 
   // --- Wonders of the World ---
   pyramids_giza: {
     file: 'pyramids-giza-satellite.jpg',
-    label: 'NASA ISS-32 Astronaut Photography · Great Pyramids at Giza & Nile Margin',
-    note: 'Astronaut orbital photography of the megalithic Giza plateau.',
+    label: 'NASA Astronaut Photography ISS010 · Great Pyramids at Giza & Nile Margin',
+    note: 'International Space Station high-magnification telephoto photography capturing Khufu, Khafre, Menkaure, and the Giza necropolis.',
     credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   taj_mahal: {
@@ -65,9 +65,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   great_barrier_reef: {
     file: 'great-barrier-reef-satellite.jpg',
-    label: 'NASA Earth Observatory · Great Barrier Reef Marine Coral System',
-    note: 'Reef barrier lagoons, coral matrix, and sediment plumes.',
-    credit: 'NASA Earth Observatory'
+    label: 'NASA Astronaut Photography ISS045 · Great Barrier Reef Marine Coral Matrix',
+    note: 'Telephoto orbital imagery of turquoise coral lagoons, barrier reefs, and deep Pacific oceanic channels.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   mount_everest: {
     file: 'everest-satellite.jpg',
@@ -83,15 +83,15 @@ export const REGION_IMAGERY = Object.freeze({
   },
   machu_picchu: {
     file: 'machu-picchu-satellite.jpg',
-    label: 'NASA ISS Astronaut Photography · Peruvian Andes & Urubamba Gorge',
-    note: 'Andean cloud forest and Incan citadel mountain ridge.',
-    credit: 'NASA JSC Earth Observations'
+    label: 'NASA Astronaut Photography ISS023 · Machu Picchu Citadel & Urubamba Andean Valley',
+    note: 'High-altitude orbital photography of the Urubamba River canyon and mist-shrouded Andean peaks.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   victoria_falls: {
     file: 'victoria-falls-satellite.jpg',
-    label: 'NASA Astronaut Photography · Victoria Falls & Zambezi River Gorges',
-    note: 'Mosi-oa-Tunya gorge cut and Zambezi river hydrology.',
-    credit: 'NASA JSC Earth Science'
+    label: 'NASA Astronaut Photography ISS062 · Victoria Falls, Batoka Gorge & Zambezi River',
+    note: 'Ultra-high-resolution orbital view of the Mosi-oa-Tunya curtain, spray plumes, and zigzagging basalt Batoka gorge channels.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
 
   // --- Huge Beaches & Oceanic Coastal Sands ---
@@ -103,9 +103,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   copacabana_beach: {
     file: 'copacabana-satellite.jpg',
-    label: 'NASA ISS-47 Astronaut Photography · Copacabana & Guanabara Bay Shoreline',
-    note: 'Iconic South Atlantic urban beach and coastal swell.',
-    credit: 'NASA JSC Earth Observations'
+    label: 'NASA Astronaut Photography ISS047 · Copacabana Crescent, Sugarloaf & Guanabara Bay',
+    note: 'High-definition astronaut photography of Rio de Janeiro’s Atlantic coastline, Rodrigo de Freitas lagoon, and Atlantic swell.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   whitehaven_beach: {
     file: 'whitehaven-beach-satellite.jpg',
@@ -123,9 +123,9 @@ export const REGION_IMAGERY = Object.freeze({
   // --- Great Rainforests of Earth ---
   amazon_rainforest: {
     file: 'amazon-rainforest-satellite.jpg',
-    label: 'NASA Earth Observatory · Amazon Rainforest Heart & Flying Rivers',
-    note: 'Dense tropical canopy and transpiration water vapor cycle.',
-    credit: 'NASA Earth Observatory / MODIS'
+    label: 'NASA Astronaut Photography ISS040 · Amazon River Meanders in Sunglint & Dense Tropical Rainforest',
+    note: 'Spectacular orbital sunglint reflecting off the meandering Amazon channels and pristine primary tropical rainforest canopy.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   },
   congo_rainforest: {
     file: 'congo-rainforest-satellite.jpg',
@@ -155,9 +155,9 @@ export const REGION_IMAGERY = Object.freeze({
   },
   oso_landslide: {
     file: 'oso-landslide-satellite.jpg',
-    label: 'USGS & Washington State Patrol · Oso Catastrophic Valley Landslide',
-    note: 'Stillaguamish river valley slope liquefaction disaster.',
-    credit: 'USGS / Washington State Patrol'
+    label: 'NASA Earth Observatory & USGS Landsat 8 (OLI) · Oso Catastrophic Valley Landslide & Barrier Lake',
+    note: 'High-resolution multispectral natural color imagery of the massive 2014 slope failure, debris fan, and blocked Stillaguamish River.',
+    credit: 'NASA Earth Observatory / USGS'
   },
   kedarnath_landslide: {
     file: 'kedarnath-landslide-satellite.jpg',
@@ -181,8 +181,8 @@ export const REGION_IMAGERY = Object.freeze({
   },
   death_valley: {
     file: 'death-valley-satellite.jpg',
-    label: 'NASA Landsat 7 & USGS · Badwater Basin, Death Valley Thermal Sink',
-    note: 'Lowest and hottest dry thermal basin in North America.',
-    credit: 'NASA / USGS EROS Data Center'
+    label: 'NASA Astronaut Photography ISS061 · Death Valley Basin & Panamint Salt Flats',
+    note: 'High-resolution nadir imagery of Badwater Basin salt playas, alluvial fans, and rugged fault-block mountain ranges.',
+    credit: 'NASA JSC Earth Science and Remote Sensing Unit'
   }
 });

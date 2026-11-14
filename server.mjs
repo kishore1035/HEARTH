@@ -46,7 +46,7 @@ const server = createServer(async (req, res) => {
     const body = await readFile(target);
     res.writeHead(200, {
       'Content-Type': TYPES[extname(target).toLowerCase()] || 'application/octet-stream',
-      'Cache-Control': LONG_LIVED.test(pathname) ? 'public, max-age=3600' : 'no-cache'
+      'Cache-Control': 'no-cache, must-revalidate'
     });
     res.end(body);
   } catch {

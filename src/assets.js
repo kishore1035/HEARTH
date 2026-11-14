@@ -77,7 +77,7 @@ export class AssetLoader {
     const timer = window.setTimeout(() => controller.abort(), 45000);
     let objectUrl;
     try {
-      const response = await fetch(`${TEXTURE_DIR}${file}`, { signal: controller.signal });
+      const response = await fetch(`${TEXTURE_DIR}${file}?v=hires`, { signal: controller.signal });
       if (!response.ok) throw new Error(`Image request failed (${response.status})`);
       objectUrl = URL.createObjectURL(await response.blob());
       const image = new Image();
