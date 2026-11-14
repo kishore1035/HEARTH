@@ -997,6 +997,7 @@ export class UI {
     this.stopCompare();
     this.compareIndex = 0;
     this.el.compareBtn.classList.add('active');
+    this.el.compareBtn.setAttribute('aria-pressed', 'true');
     this.el.compareBtn.textContent = 'Stop compare';
     this.setYear(this.compareYearA, true);
     this.compareTimer = window.setInterval(() => {
@@ -1012,6 +1013,7 @@ export class UI {
       this.compareTimer = null;
     }
     this.el.compareBtn.classList.remove('active');
+    this.el.compareBtn.setAttribute('aria-pressed', 'false');
     this.syncCompareLabels();
     this.renderSignals();
   }
