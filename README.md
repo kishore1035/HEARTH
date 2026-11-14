@@ -81,7 +81,40 @@ HEARTH expands beyond local telemetry to encompass 28 global frontlines:
 | **8** | **Atmospheric Carbon** (`CO2_ppm`) | NASA OCO-2 / OCO-3 | $340.0\text{ to }435.0\text{ ppm}$ | **Greenhouse Detune:** Adds $0\text{ to }+22\text{ cents}$ detune across voices to express atmospheric greenhouse tension. |
 | **9** | **Nighttime Lights** (`NIGHT_LIGHTS_nW`) | NASA Black Marble VIIRS | $0.0\text{ to }100.0\text{ nW/cm}^2/\text{sr}$ | **Glass Celesta Chimes:** Sine-wave pentatonic arpeggiations ($1.2\text{--}6.2\text{ steps/sec}$) reflecting electrification. |
 | **10**| **Disasters & Wildfires** (`EXTREME_EVENTS`) | NASA FIRMS VIIRS | $0\text{ to }30+\text{ events/yr}$ | **Atmospheric Percussion:** Filtered noise bursts paired with $65 \to 38\text{ Hz}$ exponential sub-thump bass drums. |
-| **11**| **Spatial Environment Loop** | CC0 Field Recordings | Ambient loop | **Continuous Biome Bed:** Crossfading loop (rainforest canopy, ocean breakers, wildfires, monsoon deluges, alpine gales, or sacred bowls). |
+| **11**| **Dedicated Spatial Soundscapes** | Field Recordings & Physical Modeling | Continuous Biome Ambiance | **28 Distinct Authentic Soundscapes:** Every location has its dedicated spatial acoustic environment—including classical evening sitar Raga Yaman over the Yamuna River for Taj Mahal, whistling concrete ruins and Geiger radiation clicks for Chernobyl, 8,000m sub-zero blizzard gales for Mount Everest, roaring cataract white water for Victoria Falls, Adriatic canal lapping with distant bells for Venice, and torrential Western Ghats monsoon cloudbursts for Wayanad. |
+
+### Dedicated Soundscapes Across All 28 Planetary Destinations
+
+| Biome & Category | Destination | Authentic Spatial Acoustic Environment | Source / Modeling |
+| :--- | :--- | :--- | :--- |
+| **Wonders of the World** | **Taj Mahal & Yamuna Basin** | Sacred evening Sitar Raga Yaman & serene Yamuna riverbank waters *(pure classical sitar, zero outdoor bird chirping artifacts)* | Classical Indian Sitar (CC BY-SA 3.0) |
+| | **Great Pyramid of Giza** | Sahara desert wind howling across ancient limestone corridors | Procedural biquad acoustic resonance |
+| | **Mount Everest & Khumbu** | 8,000m sub-zero Himalayan alpine blizzard gale | High-altitude Khumbu gale recording |
+| | **Victoria Falls & Zambezi** | Mosi-oa-Tunya cataract roar & massive white-water deluge | Zambezi cataract field recording |
+| | **Grand Canyon & Lake Mead** | Colorado River gorge wind whistling through cavernous red-rock amphitheaters | Cavernous acoustic DSP delay network |
+| | **Machu Picchu & Andes** | Misty Andean cloud forest breeze with breathy Quena flute tone | Andean highland acoustic modeling |
+| | **Great Barrier Reef** | Coral Sea reef lagoon hydrophone clicks & submerged tropical swell | Marine hydrophone acoustic model |
+| **Major Incidents & Tsunamis**| **Chernobyl Exclusion Zone** | Pripyat concrete ruins howling wind & authentic Geiger counter radiation clicks | Field Geiger counter recording & wind |
+| | **Tohoku & Fukushima Coast** | Pacific tsunami surge crashing against concrete seawalls & offshore warning buoy | Ocean surge & marine bell synthesis |
+| | **Banda Aceh Shoreline** | Heavy Indian Ocean tropical surf breakers rolling onto rebuilt coast | Low-frequency tropical surf synthesis |
+| | **Venice Lagoon** | Venetian canal water gently lapping stone quays with distant Italian church bells | Adriatic canal & campanile modeling |
+| **Megafires & Wildfires** | **Pacific NW & California** | Sierra Nevada pine forest crown fire roar & timber crackle | Forest wildfire recording |
+| | **NSW & SE Australia** | Black Summer eucalyptus bushfire frontline & ember gale | Catastrophic bushfire recording |
+| | **Amazon Basin & Pantanal** | Burning timber arc & dense smoke thermal updrafts | Deforestation fire bed |
+| **Catastrophic Landslides** | **Wayanad Megalandslide** | Torrential Western Ghats monsoon cloudburst & surging mountain mud torrent | Monsoon deluge & debris roar synthesis |
+| | **Kedarnath Glacial Debris** | Mandakini Valley roaring glacial flood & boulder-choked river rapids | Glacial flood white-water modeling |
+| | **Oso Landslide Disaster** | Pacific Northwest heavy valley downpour & distant thunder roll | Rainstorm & thunder acoustic bed |
+| | **Zhouqu Loess Mudslide** | Bailong River mountain canyon mud torrent & torrential rainfall | Mountain mudflow acoustic modeling |
+| **Huge Oceanic Beaches** | **Praia do Cassino** | Continuous 240km South Atlantic heavy rolling ocean roar | Sub-bass oceanic swell synthesis |
+| | **Cox’s Bazar Beach** | Bay of Bengal 120km unbroken intertidal surf & coastal breeze | Bay of Bengal surf loop |
+| | **Copacabana & Ipanema** | Atlantic shoreline rolling crescent breakers | Coastal wave surge bed |
+| | **Whitehaven Beach** | Gentle turquoise water ripples washing over 98% pure silica sand | High-frequency silica sand wash |
+| **Great Rainforests** | **Amazon Rainforest Heart** | Dense equatorial primary canopy wildlife choir & warm tropical rainfall | Primary rainforest field recording |
+| | **Congo Basin Rainforest** | Deep nocturnal equatorial rainforest insect chorus & dense canopy drips | Deep jungle nocturnal chorus |
+| | **Daintree Tropical Rainforest**| 135-million-year-old ancient tropical canopy breeze & flowing mossy creek | Ancient wet-tropics birds & stream |
+| | **Borneo Peat Swamp Canopy** | Ancient equatorial peat swamp treefrog chorus & warm tropical mist | Peat swamp treefrog soundscape |
+| **Critical Biosphere** | **Sundarbans Mangrove Delta** | Swirling mangrove tidal delta waters & Bay of Bengal sea breeze | Estuarine tidal wash synthesis |
+| | **Death Valley Thermal Basin** | Scorching Badwater Basin thermal silence & shimmering arid heat drafts | Ultra-low arid wind drift synthesis |
 
 ---
 

@@ -43,49 +43,49 @@ function makeImpulse(ctx, seconds = 3.2, decay = 2.4) {
   return impulse;
 }
 
-// Full 28-destination spatial environmental soundscape mapping
+// Full 28-destination dedicated spatial environmental soundscape mapping
 export const REGION_ENVIRONMENT_AUDIO = Object.freeze({
   // --- Major Incidents & Tsunamis ---
-  tohoku_fukushima: { file: 'rain-loop.ogg', name: 'Pacific Tsunami Ocean Surge & Deluge', volume: 0.65 },
-  banda_aceh: { file: 'ocean-loop.ogg', name: 'Indian Ocean Breakers & Rebuilt Shoreline', volume: 0.7 },
-  chernobyl: { file: 'mountain-wind-loop.ogg', name: 'Pripyat Exclusion Zone Desolate Wind', volume: 0.6 },
-  venice_lagoon: { file: 'ocean-loop.ogg', name: 'Venetian Lagoon Tidal Barrier & Sea Wash', volume: 0.65 },
+  tohoku_fukushima: { file: 'fukushima-tsunami.wav', name: 'Pacific Tsunami Surge, Concrete Seawall & Warning Bell', volume: 0.7 },
+  banda_aceh: { file: 'banda-aceh-surf.wav', name: 'Indian Ocean Breakers & Tropical Rebuilt Shoreline', volume: 0.7 },
+  chernobyl: { file: 'chernobyl-ruins.wav', name: 'Pripyat Exclusion Zone Whistling Ruins & Geiger Clicks', volume: 0.65 },
+  venice_lagoon: { file: 'venice-canal.wav', name: 'Venetian Canal Water Lap & Distant Church Bell', volume: 0.68 },
 
   // --- Megafires & Wildfires ---
-  california_wildfires: { file: 'wildfire-loop.ogg', name: 'Sierra Forest Blaze & Crackling Embers', volume: 0.75 },
-  australia_black_summer: { file: 'wildfire-loop.ogg', name: 'Black Summer Bushfire Frontline & Ember Gale', volume: 0.75 },
-  amazon_basin: { file: 'rainforest-loop.ogg', name: 'Amazon Basin Canopy Wildlife & Rain', volume: 0.7 },
+  california_wildfires: { file: 'wildfire-loop.ogg', name: 'Sierra Pine Forest Crown Fire & Timber Blaze', volume: 0.75 },
+  australia_black_summer: { file: 'wildfire-loop.ogg', name: 'Black Summer Eucalyptus Bushfire Frontline & Ember Roar', volume: 0.75 },
+  amazon_basin: { file: 'wildfire-loop.ogg', name: 'Amazon Basin Deforestation Arc Burning Timber & Smoke', volume: 0.72 },
 
   // --- Wonders of the World ---
-  pyramids_giza: { file: 'monument-bowl-raw.ogg', name: 'Giza Plateau Sacred Drone & Desert Breeze', volume: 0.6 },
-  taj_mahal: { file: 'monument-bowl-raw.ogg', name: 'Yamuna River & Sacred Singing Bowls', volume: 0.6 },
-  great_barrier_reef: { file: 'ocean-loop.ogg', name: 'Coral Sea Reef Breakers & Ocean Swell', volume: 0.7 },
-  mount_everest: { file: 'mountain-wind-loop.ogg', name: 'Himalayan Khumbu Ridge & Alpine Gale', volume: 0.65 },
-  grand_canyon: { file: 'mountain-wind-loop.ogg', name: 'Colorado River Gorge Wind & Echoes', volume: 0.6 },
-  machu_picchu: { file: 'mountain-wind-loop.ogg', name: 'Andean Mountain Peak & Cloud Forest Breeze', volume: 0.6 },
-  victoria_falls: { file: 'rain-loop.ogg', name: 'Mosi-oa-Tunya Cataract Mist & Roar', volume: 0.7 },
+  pyramids_giza: { file: 'giza-desert-wind.wav', name: 'Giza Plateau Sahara Desert Wind & Limestone Corridors', volume: 0.65 },
+  taj_mahal: { file: 'taj-sitar-yaman.ogg', name: 'Yamuna Riverbank & Sacred Sitar Raga Yaman', volume: 0.68 },
+  great_barrier_reef: { file: 'barrier-reef-marine.wav', name: 'Coral Sea Reef Lagoon Hydrophone & Tropical Swell', volume: 0.68 },
+  mount_everest: { file: 'everest-howling-wind.ogg', name: 'Himalayan Khumbu Ridge & 8000m Alpine Blizzard Gale', volume: 0.7 },
+  grand_canyon: { file: 'grand-canyon-echo.wav', name: 'Colorado River Gorge Cavernous Red-Rock Echoes', volume: 0.65 },
+  machu_picchu: { file: 'machu-picchu-andes.wav', name: 'Andean Mountain Peak Mist & Sacred Quena Flute', volume: 0.65 },
+  victoria_falls: { file: 'victoria-waterfall.ogg', name: 'Mosi-oa-Tunya Cataract Roar & White Water Deluge', volume: 0.72 },
 
   // --- Huge Beaches & Oceanic Coastal Sands ---
-  praia_do_cassino: { file: 'ocean-loop.ogg', name: 'South Atlantic Ocean Breakers & Endless Sand', volume: 0.75 },
-  coxs_bazar: { file: 'ocean-loop.ogg', name: 'Bay of Bengal 120km Surf & Tide', volume: 0.75 },
-  copacabana_beach: { file: 'ocean-loop.ogg', name: 'Copacabana Atlantic Shoreline Waves', volume: 0.7 },
-  whitehaven_beach: { file: 'ocean-loop.ogg', name: 'Whitsunday Coral Sand Shore & Gentle Waves', volume: 0.65 },
+  praia_do_cassino: { file: 'praia-cassino-roar.wav', name: '240km South Atlantic Endless Rolling Ocean Roar', volume: 0.75 },
+  coxs_bazar: { file: 'ocean-loop.ogg', name: 'Bay of Bengal 120km Intertidal Surf & Coastal Gale', volume: 0.75 },
+  copacabana_beach: { file: 'ocean-loop.ogg', name: 'Copacabana Atlantic Shoreline Waves & Surf Breakers', volume: 0.72 },
+  whitehaven_beach: { file: 'whitehaven-silica.wav', name: 'Whitsunday Coral Sand Shore & Gentle Silica Lap', volume: 0.65 },
 
   // --- Ancient & Lush Rainforests ---
-  amazon_rainforest: { file: 'rainforest-loop.ogg', name: 'Amazon Primary Rainforest Canopy & Birds', volume: 0.75 },
-  congo_rainforest: { file: 'rainforest-loop.ogg', name: 'Congo Basin Tropical Jungle Canopy', volume: 0.75 },
-  daintree_rainforest: { file: 'forest-birds.ogg', name: 'Daintree Ancient Tropical Rainforest Birds', volume: 0.7 },
-  borneo_rainforest: { file: 'rainforest-loop.ogg', name: 'Borneo Peat Swamp & Rainforest Choir', volume: 0.75 },
+  amazon_rainforest: { file: 'rainforest-loop.ogg', name: 'Amazon Primary Rainforest Canopy Wildlife & Rain', volume: 0.75 },
+  congo_rainforest: { file: 'congo-jungle-night.wav', name: 'Congo Basin Primary Rainforest Night Insect Choir & Drip', volume: 0.72 },
+  daintree_rainforest: { file: 'forest-birds.ogg', name: 'Daintree Ancient Tropical Rainforest Canopy & Creek', volume: 0.7 },
+  borneo_rainforest: { file: 'borneo-swamp-chorus.wav', name: 'Borneo Tropical Peat Swamp & Treefrog Choir', volume: 0.72 },
 
   // --- Catastrophic Landslides & Mountain Disasters ---
-  wayanad_landslide: { file: 'rain-loop.ogg', name: 'Western Ghats Monsoon Deluge & Valley Torrent', volume: 0.7 },
-  oso_landslide: { file: 'rain-loop.ogg', name: 'Pacific Northwest River Valley Rain', volume: 0.65 },
-  kedarnath_landslide: { file: 'rain-loop.ogg', name: 'Mandakini Valley Glacial Torrent & Rain', volume: 0.7 },
-  zhouqu_landslide: { file: 'mountain-wind-loop.ogg', name: 'Bailong River Mountain Canyon Wind', volume: 0.65 },
+  wayanad_landslide: { file: 'wayanad-landslide.wav', name: 'Western Ghats Monsoon Cloudburst & Mountain Torrent', volume: 0.72 },
+  oso_landslide: { file: 'rain-thunder.ogg', name: 'Pacific Northwest River Valley Downpour & Thunder', volume: 0.7 },
+  kedarnath_landslide: { file: 'kedarnath-debris.wav', name: 'Mandakini Valley Glacial Flood & Roaring River Rapids', volume: 0.72 },
+  zhouqu_landslide: { file: 'wayanad-landslide.wav', name: 'Bailong River Mountain Canyon Mud Torrent & Deluge', volume: 0.7 },
 
   // --- Critical Biosphere Frontlines ---
-  death_valley: { file: 'mountain-wind-loop.ogg', name: 'Mojave Desert Shimmering Heat & Wind', volume: 0.6 },
-  sundarbans: { file: 'ocean-loop.ogg', name: 'Sundarbans Mangrove Tidal Estuary & Waves', volume: 0.7 }
+  death_valley: { file: 'death-valley-heat.wav', name: 'Badwater Basin Shimmering Thermal Arid Drafts', volume: 0.62 },
+  sundarbans: { file: 'sundarbans-mangrove.wav', name: 'Sundarbans Mangrove Tidal Estuary Swirl & Delta Breeze', volume: 0.68 }
 });
 
 export class SignalAudio {
@@ -707,41 +707,59 @@ export class SignalAudio {
     }
   }
 
-  // Soft water droplet pluck (pure sine with organic drop envelope)
+  // Soft warm water droplet pluck with organic downward fluid pitch bend
   spawnPluck(time) {
     const ctx = this.ctx;
     const osc = ctx.createOscillator();
+    const filter = ctx.createBiquadFilter();
     const gain = ctx.createGain();
     const degree = PENTATONIC[Math.floor(Math.random() * PENTATONIC.length)];
-    const octave = Math.random() < 0.4 ? 2 : 1;
+
+    // Warm, rounded water register (164 - 330 Hz)
+    const baseFreq = 164.81 * Math.pow(2, degree / 12);
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(329.63 * octave * Math.pow(2, degree / 12), time);
+    osc.frequency.setValueAtTime(baseFreq * 1.25, time);
+    osc.frequency.exponentialRampToValueAtTime(baseFreq, time + 0.045);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(520, time);
+
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.035, time + 0.005);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.26);
-    osc.connect(gain);
+    gain.gain.linearRampToValueAtTime(0.04, time + 0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.22);
+
+    osc.connect(filter);
+    filter.connect(gain);
     gain.connect(this.rainBus);
     osc.start(time);
-    osc.stop(time + 0.3);
+    osc.stop(time + 0.25);
   }
 
-  // Crystalline glass celesta arpeggio (sine wave chime)
-  // Replaces harsh 8-bit square wave buzzer
+  // Crystalline glass celesta bell chime in middle octave (pure musical tone)
   spawnArp(time) {
     const ctx = this.ctx;
     const osc = ctx.createOscillator();
+    const filter = ctx.createBiquadFilter();
     const gain = ctx.createGain();
     const degree = PENTATONIC[this.lightsStep % PENTATONIC.length];
     this.lightsStep += 1;
+
+    // Warm middle octave (261 Hz C4 to 523 Hz C5)
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(523.25 * Math.pow(2, degree / 12), time);
+    osc.frequency.setValueAtTime(261.63 * Math.pow(2, degree / 12), time);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(780, time);
+
     gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.linearRampToValueAtTime(0.022, time + 0.005);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.2);
-    osc.connect(gain);
+    gain.gain.linearRampToValueAtTime(0.024, time + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.38);
+
+    osc.connect(filter);
+    filter.connect(gain);
     gain.connect(this.lightsBus);
     osc.start(time);
-    osc.stop(time + 0.22);
+    osc.stop(time + 0.4);
   }
 
   // Soft cinematic sub-thump and wind sweep
